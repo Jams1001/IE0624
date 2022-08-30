@@ -94,6 +94,31 @@ void display(int num){
         GP4 = 0;
     }
 
+    else if (num == 6){
+        GP0 = 0;
+        GP1 = 1;
+        GP2 = 1;
+        GP4 = 0;    
+    }
+    else if (num == 7){
+        GP0 = 1;
+        GP1 = 1;
+        GP2 = 1;
+        GP4 = 0;
+    }
+    else if (num == 8){
+        GP0 = 0;
+        GP1 = 0;
+        GP2 = 0;
+        GP4 = 1;
+    }
+    else if (num == 9){
+        GP0 = 1;
+        GP1 = 0;
+        GP2 = 0;
+        GP4 = 1;
+    }
+
     return;
 }
 
