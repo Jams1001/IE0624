@@ -7,7 +7,6 @@ word __at 0x2007 __CONFIG = (_WDT_OFF & _MCLRE_OFF);
 void delay (unsigned int tiempo);
 void display(int num);
 int random();
-int size = 3;
 
 int main(){
     TRISIO = 0b00001000; 
