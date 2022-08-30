@@ -27,7 +27,7 @@ int main(){
         if (num2 >= 10){
             num2 = 0;
         }  
-        
+
         if(GP3 == 1){
             counter = counter + 1;
             while (GP3 == 1){
@@ -39,6 +39,17 @@ int main(){
             delay(2);
 			}
         } 	
+
+
+            GP0 = 0;
+            GP1 = 1;    
+            GP2 = 1;
+            GP4 = 1;
+            delay(1);
+            GP5 = 0;
+            delay(1);
+            GP5 = 1;
+            delay(1);
 
     }
 }
