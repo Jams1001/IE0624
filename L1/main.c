@@ -7,6 +7,7 @@ word __at 0x2007 __CONFIG = (_WDT_OFF & _MCLRE_OFF);
 void delay (unsigned int tiempo);
 void display(int num);
 int random();
+int size = 16;
 
 int main(){
     TRISIO = 0b00001000; 
@@ -38,6 +39,10 @@ int main(){
             delay(2);
 			}
         } 	
+
+        if(counter == 16){
+            break;
+        }
 
 
             GP0 = 0;
