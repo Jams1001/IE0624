@@ -19,7 +19,15 @@ int main(){
     int counter = 0;
     while(1){
 
-
+        num1 = num1 + 1;
+        num2 = num2 + 1;
+        if (num1 >= 10){
+            num1 = 0;
+        }   
+        if (num2 >= 10){
+            num2 = 0;
+        }  
+        
         if(GP3 == 1){
             counter = counter + 1;
             while (GP3 == 1){
