@@ -43,17 +43,15 @@ int main(){
                 delay(2);
 			}
         }
-        if(counter == 2){
+        if(counter == 3){
             display(9);
             GP5 = 0;
 			delay(1);
 			display(9);
             GP5 = 1;
 			delay(1);
-        } 	
-
-
-
+        }
+        else{
             GP0 = 0;
             GP1 = 1;    
             GP2 = 1;
@@ -63,6 +61,7 @@ int main(){
             delay(1);
             GP5 = 1;
             delay(1);
+        } 	
 
     }
 }
