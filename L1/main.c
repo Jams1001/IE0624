@@ -16,6 +16,8 @@ int main(){
     int num1 = 2;
     int num2 = 1;
     int counter = 0;
+
+    
     while(1){
 
         num1 = num1 + 1;
@@ -39,8 +41,38 @@ int main(){
 			}
         } 	
 
-        if(counter == 16){
-            break;
+        if(counter == 2){
+
+            while(1){ 
+                display(9);
+                GP5 = 0;
+			    delay(1);
+
+			    display(9);
+                GP5 = 1;
+			    delay(1);
+
+			    display(9);
+                GP5 = 0;
+			    delay(1);
+
+			    display(9);
+                GP5 = 1;
+			    delay(1);
+
+			    display(9);
+                GP5 = 0;
+			    delay(1);
+
+
+			    display(9);
+                GP5 = 1;
+			    delay(1);
+
+                display(9);
+                GP5 = 0;
+			    delay(1);
+            }
         }
 
 
