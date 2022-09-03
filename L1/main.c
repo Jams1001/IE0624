@@ -19,7 +19,7 @@ int main(){
 
     
     while(1){
-
+        int sumar = 0;
         num1 = num1 + 1;
         num2 = num2 + 1;
         if (num1 >= 10){
@@ -30,50 +30,28 @@ int main(){
         }  
 
         if(GP3 == 1){
-            counter = counter + 1;
+            if(sumar == 0){
+                counter++;
+                sumar = 1;
+            }
             while (GP3 == 1){
-            display(num1);
-            GP5 = 1;
-            delay(2);
-            display(num2);
-            GP5 = 0;
-            delay(2);
+                display(num1);
+                GP5 = 1;
+                delay(2);
+                display(num2);
+                GP5 = 0;
+                delay(2);
 			}
+        }
+        if(counter == 2){
+            display(9);
+            GP5 = 0;
+			delay(1);
+			display(9);
+            GP5 = 1;
+			delay(1);
         } 	
 
-        if(counter == 2){
-
-            while(1){ 
-                display(9);
-                GP5 = 0;
-			    delay(1);
-
-			    display(9);
-                GP5 = 1;
-			    delay(1);
-
-			    display(9);
-                GP5 = 0;
-			    delay(1);
-
-			    display(9);
-                GP5 = 1;
-			    delay(1);
-
-			    display(9);
-                GP5 = 0;
-			    delay(1);
-
-
-			    display(9);
-                GP5 = 1;
-			    delay(1);
-
-                display(9);
-                GP5 = 0;
-			    delay(1);
-            }
-        }
 
 
             GP0 = 0;
