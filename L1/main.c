@@ -8,7 +8,7 @@ void delay (unsigned int tiempo);
 void display(unsigned char num);
 unsigned char random();
 
-int main(){
+unsigned char main(){
     TRISIO = 0b00001000; 
     ANSEL  = 0x00;  
     CMCON  = 0x07; 
