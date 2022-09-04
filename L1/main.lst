@@ -1,6 +1,6 @@
 gplink-1.4.0 #1107 (Apr  3 2018)
 Copyright (c) 1998-2014 gputils project
-Listing File Generated: 9-3-2022  20:36:15
+Listing File Generated: 9-3-2022  22:21:36
  
  
 Address  Value    Disassembly              Source
@@ -204,164 +204,178 @@ Address  Value    Disassembly              Source
 0000aa   3064     movlw   0x64             	MOVLW	0x64
                                            ;	.line	28; "main.c"	num0 = 0;
 0000ab   0230     subwf   0x30, 0x0        	SUBWF	r0x1011,W
-                                           ;	.line	34; "main.c"	num1 = dividirby10(num0);
+                                           ;	.line	31; "main.c"	num1 = dividirby10(num0);
 0000ac   1803     btfsc   0x03, 0x0        	BTFSC	STATUS,0
 0000ad   01b0     clrf    0x30             	CLRF	r0x1011
 0000ae   0830     movf    0x30, 0x0        	MOVF	r0x1011,W
                                            	PAGESEL	_dividirby10
-0000af   21a5     call    0x01a5           	CALL	_dividirby10
+0000af   21ac     call    0x01ac           	CALL	_dividirby10
                                            	PAGESEL	$
-                                           ;	.line	35; "main.c"	num2 = residuo(num0, 10, num1);
+                                           ;	.line	32; "main.c"	num2 = residuo(num0, 10, num1);
 0000b0   00b2     movwf   0x32             	MOVWF	r0x1013
 0000b1   00ae     movwf   0x2e             	MOVWF	STK01
 0000b2   300a     movlw   0x0a             	MOVLW	0x0a
 0000b3   00af     movwf   0x2f             	MOVWF	STK00
 0000b4   0830     movf    0x30, 0x0        	MOVF	r0x1011,W
                                            	PAGESEL	_residuo
-0000b5   2228     call    0x0228           	CALL	_residuo
+0000b5   222f     call    0x022f           	CALL	_residuo
                                            	PAGESEL	$
 0000b6   00b3     movwf   0x33             	MOVWF	r0x1014
-                                           ;	.line	37; "main.c"	if(GP3 == 1){
-0000b7   01b4     clrf    0x34             	CLRF	r0x1015
-0000b8   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
-0000b9   1985     btfsc   0x05, 0x3        	BTFSC	_GPIObits,3
-0000ba   0ab4     incf    0x34, 0x1        	INCF	r0x1015,F
-0000bb   0834     movf    0x34, 0x0        	MOVF	r0x1015,W
-0000bc   3a01     xorlw   0x01             	XORLW	0x01
-0000bd   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
-0000be   28df     goto    0x00df           	GOTO	_00117_DS_
-                                           ;	.line	39; "main.c"	counter++;
-0000bf   0ab1     incf    0x31, 0x1        	INCF	r0x1012,F
-                                           ;	.line	42; "main.c"	if(bandera == 1){
-0000c0   0845     movf    0x45, 0x0        	MOVF	_main_bandera_65537_6,W
-0000c1   3a01     xorlw   0x01             	XORLW	0x01
-0000c2   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
-0000c3   28c6     goto    0x00c6           	GOTO	_00113_DS_
-                                           ;	.line	43; "main.c"	counter = 0;
-0000c4   01b1     clrf    0x31             	CLRF	r0x1012
-                                           ;	.line	44; "main.c"	bandera = 0;
-0000c5   01c5     clrf    0x45             	CLRF	_main_bandera_65537_6
+                                           ;;swapping arguments (AOP_TYPEs 1/2)
+                                           ;;unsigned compare: left >= lit(0xA=10), size=1
+                                           ;	.line	34; "main.c"	if (num0 <= 9){
+0000b7   300a     movlw   0x0a             	MOVLW	0x0a
+0000b8   0230     subwf   0x30, 0x0        	SUBWF	r0x1011,W
+0000b9   1803     btfsc   0x03, 0x0        	BTFSC	STATUS,0
+0000ba   28be     goto    0x00be           	GOTO	_00108_DS_
+                                           ;;genSkipc:3307: created from rifx:0x7fff48c0f9c0
+                                           ;	.line	35; "main.c"	num1 = num0;
+0000bb   0830     movf    0x30, 0x0        	MOVF	r0x1011,W
+0000bc   00b2     movwf   0x32             	MOVWF	r0x1013
+                                           ;	.line	36; "main.c"	num2 = 0;
+0000bd   01b3     clrf    0x33             	CLRF	r0x1014
+                                           _00108_DS_:
+                                           ;	.line	39; "main.c"	if(GP3 == 1){
+0000be   01b4     clrf    0x34             	CLRF	r0x1015
+0000bf   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
+0000c0   1985     btfsc   0x05, 0x3        	BTFSC	_GPIObits,3
+0000c1   0ab4     incf    0x34, 0x1        	INCF	r0x1015,F
+0000c2   0834     movf    0x34, 0x0        	MOVF	r0x1015,W
+0000c3   3a01     xorlw   0x01             	XORLW	0x01
+0000c4   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+0000c5   28e6     goto    0x00e6           	GOTO	_00117_DS_
+                                           ;	.line	41; "main.c"	counter++;
+0000c6   0ab1     incf    0x31, 0x1        	INCF	r0x1012,F
+                                           ;	.line	44; "main.c"	if(bandera == 1){
+0000c7   0845     movf    0x45, 0x0        	MOVF	_main_bandera_65537_6,W
+0000c8   3a01     xorlw   0x01             	XORLW	0x01
+0000c9   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+0000ca   28cd     goto    0x00cd           	GOTO	_00113_DS_
+                                           ;	.line	45; "main.c"	counter = 0;
+0000cb   01b1     clrf    0x31             	CLRF	r0x1012
+                                           ;	.line	46; "main.c"	bandera = 0;
+0000cc   01c5     clrf    0x45             	CLRF	_main_bandera_65537_6
                                            _00113_DS_:
-                                           ;	.line	46; "main.c"	while (GP3 == 1){
-0000c6   01b4     clrf    0x34             	CLRF	r0x1015
-0000c7   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
-0000c8   1985     btfsc   0x05, 0x3        	BTFSC	_GPIObits,3
-0000c9   0ab4     incf    0x34, 0x1        	INCF	r0x1015,F
-0000ca   0834     movf    0x34, 0x0        	MOVF	r0x1015,W
-0000cb   3a01     xorlw   0x01             	XORLW	0x01
-0000cc   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
-0000cd   28df     goto    0x00df           	GOTO	_00117_DS_
-                                           ;	.line	47; "main.c"	display(num1);
-0000ce   0832     movf    0x32, 0x0        	MOVF	r0x1013,W
+                                           ;	.line	48; "main.c"	while (GP3 == 1){
+0000cd   01b4     clrf    0x34             	CLRF	r0x1015
+0000ce   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
+0000cf   1985     btfsc   0x05, 0x3        	BTFSC	_GPIObits,3
+0000d0   0ab4     incf    0x34, 0x1        	INCF	r0x1015,F
+0000d1   0834     movf    0x34, 0x0        	MOVF	r0x1015,W
+0000d2   3a01     xorlw   0x01             	XORLW	0x01
+0000d3   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+0000d4   28e6     goto    0x00e6           	GOTO	_00117_DS_
+                                           ;	.line	49; "main.c"	display(num1);
+0000d5   0832     movf    0x32, 0x0        	MOVF	r0x1013,W
                                            	PAGESEL	_display
-0000cf   210d     call    0x010d           	CALL	_display
+0000d6   2114     call    0x0114           	CALL	_display
                                            	PAGESEL	$
-                                           ;	.line	48; "main.c"	GP5 = 1;
-0000d0   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
-0000d1   1685     bsf     0x05, 0x5        	BSF	_GPIObits,5
-                                           ;	.line	49; "main.c"	delay(2);
-0000d2   3002     movlw   0x02             	MOVLW	0x02
-0000d3   00af     movwf   0x2f             	MOVWF	STK00
-0000d4   3000     movlw   0x00             	MOVLW	0x00
+                                           ;	.line	50; "main.c"	GP5 = 1;
+0000d7   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
+0000d8   1685     bsf     0x05, 0x5        	BSF	_GPIObits,5
+                                           ;	.line	51; "main.c"	delay(2);
+0000d9   3002     movlw   0x02             	MOVLW	0x02
+0000da   00af     movwf   0x2f             	MOVWF	STK00
+0000db   3000     movlw   0x00             	MOVLW	0x00
                                            	PAGESEL	_delay
-0000d5   2201     call    0x0201           	CALL	_delay
+0000dc   2208     call    0x0208           	CALL	_delay
                                            	PAGESEL	$
-                                           ;	.line	50; "main.c"	display(num2);
-0000d6   0833     movf    0x33, 0x0        	MOVF	r0x1014,W
+                                           ;	.line	52; "main.c"	display(num2);
+0000dd   0833     movf    0x33, 0x0        	MOVF	r0x1014,W
                                            	PAGESEL	_display
-0000d7   210d     call    0x010d           	CALL	_display
+0000de   2114     call    0x0114           	CALL	_display
                                            	PAGESEL	$
-                                           ;	.line	51; "main.c"	GP5 = 0;
-0000d8   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
-0000d9   1285     bcf     0x05, 0x5        	BCF	_GPIObits,5
-                                           ;	.line	52; "main.c"	delay(2);
-0000da   3002     movlw   0x02             	MOVLW	0x02
-0000db   00af     movwf   0x2f             	MOVWF	STK00
-0000dc   3000     movlw   0x00             	MOVLW	0x00
+                                           ;	.line	53; "main.c"	GP5 = 0;
+0000df   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
+0000e0   1285     bcf     0x05, 0x5        	BCF	_GPIObits,5
+                                           ;	.line	54; "main.c"	delay(2);
+0000e1   3002     movlw   0x02             	MOVLW	0x02
+0000e2   00af     movwf   0x2f             	MOVWF	STK00
+0000e3   3000     movlw   0x00             	MOVLW	0x00
                                            	PAGESEL	_delay
-0000dd   2201     call    0x0201           	CALL	_delay
+0000e4   2208     call    0x0208           	CALL	_delay
                                            	PAGESEL	$
-0000de   28c6     goto    0x00c6           	GOTO	_00113_DS_
+0000e5   28cd     goto    0x00cd           	GOTO	_00113_DS_
                                            _00117_DS_:
-                                           ;	.line	55; "main.c"	if(counter == 15){
-0000df   0831     movf    0x31, 0x0        	MOVF	r0x1012,W
-0000e0   3a0f     xorlw   0x0f             	XORLW	0x0f
-0000e1   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
-0000e2   28f6     goto    0x00f6           	GOTO	_00119_DS_
-                                           ;	.line	56; "main.c"	display(9);
-0000e3   3009     movlw   0x09             	MOVLW	0x09
+                                           ;	.line	57; "main.c"	if(counter == 15){
+0000e6   0831     movf    0x31, 0x0        	MOVF	r0x1012,W
+0000e7   3a0f     xorlw   0x0f             	XORLW	0x0f
+0000e8   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+0000e9   28fd     goto    0x00fd           	GOTO	_00119_DS_
+                                           ;	.line	58; "main.c"	display(9);
+0000ea   3009     movlw   0x09             	MOVLW	0x09
                                            	PAGESEL	_display
-0000e4   210d     call    0x010d           	CALL	_display
+0000eb   2114     call    0x0114           	CALL	_display
                                            	PAGESEL	$
-                                           ;	.line	57; "main.c"	GP5 = 0;
-0000e5   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
-0000e6   1285     bcf     0x05, 0x5        	BCF	_GPIObits,5
-                                           ;	.line	58; "main.c"	delay(1);
-0000e7   3001     movlw   0x01             	MOVLW	0x01
-0000e8   00af     movwf   0x2f             	MOVWF	STK00
-0000e9   3000     movlw   0x00             	MOVLW	0x00
+                                           ;	.line	59; "main.c"	GP5 = 0;
+0000ec   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
+0000ed   1285     bcf     0x05, 0x5        	BCF	_GPIObits,5
+                                           ;	.line	60; "main.c"	delay(1);
+0000ee   3001     movlw   0x01             	MOVLW	0x01
+0000ef   00af     movwf   0x2f             	MOVWF	STK00
+0000f0   3000     movlw   0x00             	MOVLW	0x00
                                            	PAGESEL	_delay
-0000ea   2201     call    0x0201           	CALL	_delay
+0000f1   2208     call    0x0208           	CALL	_delay
                                            	PAGESEL	$
-                                           ;	.line	59; "main.c"	display(9);
-0000eb   3009     movlw   0x09             	MOVLW	0x09
+                                           ;	.line	61; "main.c"	display(9);
+0000f2   3009     movlw   0x09             	MOVLW	0x09
                                            	PAGESEL	_display
-0000ec   210d     call    0x010d           	CALL	_display
+0000f3   2114     call    0x0114           	CALL	_display
                                            	PAGESEL	$
-                                           ;	.line	60; "main.c"	GP5 = 1;
-0000ed   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
-0000ee   1685     bsf     0x05, 0x5        	BSF	_GPIObits,5
-                                           ;	.line	61; "main.c"	delay(1);
-0000ef   3001     movlw   0x01             	MOVLW	0x01
-0000f0   00af     movwf   0x2f             	MOVWF	STK00
-0000f1   3000     movlw   0x00             	MOVLW	0x00
+                                           ;	.line	62; "main.c"	GP5 = 1;
+0000f4   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
+0000f5   1685     bsf     0x05, 0x5        	BSF	_GPIObits,5
+                                           ;	.line	63; "main.c"	delay(1);
+0000f6   3001     movlw   0x01             	MOVLW	0x01
+0000f7   00af     movwf   0x2f             	MOVWF	STK00
+0000f8   3000     movlw   0x00             	MOVLW	0x00
                                            	PAGESEL	_delay
-0000f2   2201     call    0x0201           	CALL	_delay
+0000f9   2208     call    0x0208           	CALL	_delay
                                            	PAGESEL	$
-                                           ;	.line	62; "main.c"	bandera = 1;
-0000f3   3001     movlw   0x01             	MOVLW	0x01
-0000f4   00c5     movwf   0x45             	MOVWF	_main_bandera_65537_6
-0000f5   28a9     goto    0x00a9           	GOTO	_00122_DS_
+                                           ;	.line	64; "main.c"	bandera = 1;
+0000fa   3001     movlw   0x01             	MOVLW	0x01
+0000fb   00c5     movwf   0x45             	MOVWF	_main_bandera_65537_6
+0000fc   28a9     goto    0x00a9           	GOTO	_00122_DS_
                                            _00119_DS_:
-                                           ;	.line	65; "main.c"	GP0 = 0;
-0000f6   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
-0000f7   1005     bcf     0x05, 0x0        	BCF	_GPIObits,0
-                                           ;	.line	66; "main.c"	GP1 = 1;    
-0000f8   1485     bsf     0x05, 0x1        	BSF	_GPIObits,1
-                                           ;	.line	67; "main.c"	GP2 = 1;
-0000f9   1505     bsf     0x05, 0x2        	BSF	_GPIObits,2
-                                           ;	.line	68; "main.c"	GP4 = 1;
-0000fa   1605     bsf     0x05, 0x4        	BSF	_GPIObits,4
-                                           ;	.line	69; "main.c"	delay(1);
-0000fb   3001     movlw   0x01             	MOVLW	0x01
-0000fc   00af     movwf   0x2f             	MOVWF	STK00
-0000fd   3000     movlw   0x00             	MOVLW	0x00
-                                           	PAGESEL	_delay
-0000fe   2201     call    0x0201           	CALL	_delay
-                                           	PAGESEL	$
-                                           ;	.line	70; "main.c"	GP5 = 0;
-0000ff   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
-000100   1285     bcf     0x05, 0x5        	BCF	_GPIObits,5
+                                           ;	.line	67; "main.c"	GP0 = 0;
+0000fd   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
+0000fe   1005     bcf     0x05, 0x0        	BCF	_GPIObits,0
+                                           ;	.line	68; "main.c"	GP1 = 1;    
+0000ff   1485     bsf     0x05, 0x1        	BSF	_GPIObits,1
+                                           ;	.line	69; "main.c"	GP2 = 1;
+000100   1505     bsf     0x05, 0x2        	BSF	_GPIObits,2
+                                           ;	.line	70; "main.c"	GP4 = 1;
+000101   1605     bsf     0x05, 0x4        	BSF	_GPIObits,4
                                            ;	.line	71; "main.c"	delay(1);
-000101   3001     movlw   0x01             	MOVLW	0x01
-000102   00af     movwf   0x2f             	MOVWF	STK00
-000103   3000     movlw   0x00             	MOVLW	0x00
+000102   3001     movlw   0x01             	MOVLW	0x01
+000103   00af     movwf   0x2f             	MOVWF	STK00
+000104   3000     movlw   0x00             	MOVLW	0x00
                                            	PAGESEL	_delay
-000104   2201     call    0x0201           	CALL	_delay
+000105   2208     call    0x0208           	CALL	_delay
                                            	PAGESEL	$
-                                           ;	.line	72; "main.c"	GP5 = 1;
-000105   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
-000106   1685     bsf     0x05, 0x5        	BSF	_GPIObits,5
+                                           ;	.line	72; "main.c"	GP5 = 0;
+000106   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
+000107   1285     bcf     0x05, 0x5        	BCF	_GPIObits,5
                                            ;	.line	73; "main.c"	delay(1);
-000107   3001     movlw   0x01             	MOVLW	0x01
-000108   00af     movwf   0x2f             	MOVWF	STK00
-000109   3000     movlw   0x00             	MOVLW	0x00
+000108   3001     movlw   0x01             	MOVLW	0x01
+000109   00af     movwf   0x2f             	MOVWF	STK00
+00010a   3000     movlw   0x00             	MOVLW	0x00
                                            	PAGESEL	_delay
-00010a   2201     call    0x0201           	CALL	_delay
+00010b   2208     call    0x0208           	CALL	_delay
                                            	PAGESEL	$
-00010b   28a9     goto    0x00a9           	GOTO	_00122_DS_
-                                           ;	.line	77; "main.c"	}
-00010c   0008     return                   	RETURN	
+                                           ;	.line	74; "main.c"	GP5 = 1;
+00010c   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
+00010d   1685     bsf     0x05, 0x5        	BSF	_GPIObits,5
+                                           ;	.line	75; "main.c"	delay(1);
+00010e   3001     movlw   0x01             	MOVLW	0x01
+00010f   00af     movwf   0x2f             	MOVWF	STK00
+000110   3000     movlw   0x00             	MOVLW	0x00
+                                           	PAGESEL	_delay
+000111   2208     call    0x0208           	CALL	_delay
+                                           	PAGESEL	$
+000112   28a9     goto    0x00a9           	GOTO	_00122_DS_
+                                           ;	.line	79; "main.c"	}
+000113   0008     return                   	RETURN	
                                            ; exit point of _main
                                            
                                            ;***
@@ -381,26 +395,26 @@ Address  Value    Disassembly              Source
                                            S_main__residuo	code
                                            _residuo:
                                            ; 2 exit points
-                                           ;	.line	166; "main.c"	unsigned char residuo(unsigned char num0, unsigned char divisor, unsigned char num1) {
-000228   00c2     movwf   0x42             	MOVWF	r0x1001
-000229   082f     movf    0x2f, 0x0        	MOVF	STK00,W
-00022a   00c3     movwf   0x43             	MOVWF	r0x1002
-00022b   082e     movf    0x2e, 0x0        	MOVF	STK01,W
-00022c   00c4     movwf   0x44             	MOVWF	r0x1003
-                                           ;	.line	168; "main.c"	r = num0 - num1*divisor;
-00022d   0843     movf    0x43, 0x0        	MOVF	r0x1002,W
-00022e   00af     movwf   0x2f             	MOVWF	STK00
-00022f   0844     movf    0x44, 0x0        	MOVF	r0x1003,W
+                                           ;	.line	168; "main.c"	unsigned char residuo(unsigned char num0, unsigned char divisor, unsigned char num1) {
+00022f   00c2     movwf   0x42             	MOVWF	r0x1001
+000230   082f     movf    0x2f, 0x0        	MOVF	STK00,W
+000231   00c3     movwf   0x43             	MOVWF	r0x1002
+000232   082e     movf    0x2e, 0x0        	MOVF	STK01,W
+000233   00c4     movwf   0x44             	MOVWF	r0x1003
+                                           ;	.line	170; "main.c"	r = num0 - num1*divisor;
+000234   0843     movf    0x43, 0x0        	MOVF	r0x1002,W
+000235   00af     movwf   0x2f             	MOVWF	STK00
+000236   0844     movf    0x44, 0x0        	MOVF	r0x1003,W
                                            	PAGESEL	__muluchar
-000230   21d6     call    0x01d6           	CALL	__muluchar
+000237   21dd     call    0x01dd           	CALL	__muluchar
                                            	PAGESEL	$
-000231   082f     movf    0x2f, 0x0        	MOVF	STK00,W
-000232   00c3     movwf   0x43             	MOVWF	r0x1002
-000233   02c2     subwf   0x42, 0x1        	SUBWF	r0x1001,F
-                                           ;	.line	169; "main.c"	return r;
-000234   0842     movf    0x42, 0x0        	MOVF	r0x1001,W
-                                           ;	.line	170; "main.c"	}
-000235   0008     return                   	RETURN	
+000238   082f     movf    0x2f, 0x0        	MOVF	STK00,W
+000239   00c3     movwf   0x43             	MOVWF	r0x1002
+00023a   02c2     subwf   0x42, 0x1        	SUBWF	r0x1001,F
+                                           ;	.line	171; "main.c"	return r;
+00023b   0842     movf    0x42, 0x0        	MOVF	r0x1001,W
+                                           ;	.line	172; "main.c"	}
+00023c   0008     return                   	RETURN	
                                            ; exit point of _residuo
                                            
                                            ;***
@@ -416,69 +430,69 @@ Address  Value    Disassembly              Source
                                            S_main__dividirby10	code
                                            _dividirby10:
                                            ; 2 exit points
-                                           ;	.line	156; "main.c"	unsigned char dividirby10(unsigned char n) {
-0001a5   00be     movwf   0x3e             	MOVWF	r0x1004
+                                           ;	.line	158; "main.c"	unsigned char dividirby10(unsigned char n) {
+0001ac   00be     movwf   0x3e             	MOVWF	r0x1004
                                            ;;shiftRight_Left2ResultLit:5474: shCount=1, size=1, sign=0, same=0, offr=0
-                                           ;	.line	158; "main.c"	q = (n >> 1) + (n >> 2);
-0001a6   1003     bcf     0x03, 0x0        	BCF	STATUS,0
-0001a7   0c3e     rrf     0x3e, 0x0        	RRF	r0x1004,W
-0001a8   00bf     movwf   0x3f             	MOVWF	r0x1005
+                                           ;	.line	160; "main.c"	q = (n >> 1) + (n >> 2);
+0001ad   1003     bcf     0x03, 0x0        	BCF	STATUS,0
+0001ae   0c3e     rrf     0x3e, 0x0        	RRF	r0x1004,W
+0001af   00bf     movwf   0x3f             	MOVWF	r0x1005
                                            ;;shiftRight_Left2ResultLit:5474: shCount=1, size=1, sign=0, same=0, offr=0
-0001a9   1003     bcf     0x03, 0x0        	BCF	STATUS,0
-0001aa   0c3e     rrf     0x3e, 0x0        	RRF	r0x1004,W
-0001ab   00c0     movwf   0x40             	MOVWF	r0x1006
-                                           ;;shiftRight_Left2ResultLit:5474: shCount=1, size=1, sign=0, same=1, offr=0
-0001ac   1003     bcf     0x03, 0x0        	BCF	STATUS,0
-0001ad   0cc0     rrf     0x40, 0x1        	RRF	r0x1006,F
-0001ae   0840     movf    0x40, 0x0        	MOVF	r0x1006,W
-0001af   07bf     addwf   0x3f, 0x1        	ADDWF	r0x1005,F
-                                           ;	.line	159; "main.c"	q = q + (q >> 4);
-0001b0   0e3f     swapf   0x3f, 0x0        	SWAPF	r0x1005,W
-0001b1   390f     andlw   0x0f             	ANDLW	0x0f
+0001b0   1003     bcf     0x03, 0x0        	BCF	STATUS,0
+0001b1   0c3e     rrf     0x3e, 0x0        	RRF	r0x1004,W
 0001b2   00c0     movwf   0x40             	MOVWF	r0x1006
-0001b3   073f     addwf   0x3f, 0x0        	ADDWF	r0x1005,W
-0001b4   00c0     movwf   0x40             	MOVWF	r0x1006
+                                           ;;shiftRight_Left2ResultLit:5474: shCount=1, size=1, sign=0, same=1, offr=0
+0001b3   1003     bcf     0x03, 0x0        	BCF	STATUS,0
+0001b4   0cc0     rrf     0x40, 0x1        	RRF	r0x1006,F
+0001b5   0840     movf    0x40, 0x0        	MOVF	r0x1006,W
+0001b6   07bf     addwf   0x3f, 0x1        	ADDWF	r0x1005,F
+                                           ;	.line	161; "main.c"	q = q + (q >> 4);
+0001b7   0e3f     swapf   0x3f, 0x0        	SWAPF	r0x1005,W
+0001b8   390f     andlw   0x0f             	ANDLW	0x0f
+0001b9   00c0     movwf   0x40             	MOVWF	r0x1006
+0001ba   073f     addwf   0x3f, 0x0        	ADDWF	r0x1005,W
+0001bb   00c0     movwf   0x40             	MOVWF	r0x1006
                                            ;;shiftRight_Left2ResultLit:5474: shCount=1, size=1, sign=0, same=0, offr=0
-                                           ;	.line	162; "main.c"	q = q >> 3;
-0001b5   1003     bcf     0x03, 0x0        	BCF	STATUS,0
-0001b6   0c40     rrf     0x40, 0x0        	RRF	r0x1006,W
-0001b7   00bf     movwf   0x3f             	MOVWF	r0x1005
+                                           ;	.line	164; "main.c"	q = q >> 3;
+0001bc   1003     bcf     0x03, 0x0        	BCF	STATUS,0
+0001bd   0c40     rrf     0x40, 0x0        	RRF	r0x1006,W
+0001be   00bf     movwf   0x3f             	MOVWF	r0x1005
                                            ;;shiftRight_Left2ResultLit:5474: shCount=1, size=1, sign=0, same=1, offr=0
-0001b8   1003     bcf     0x03, 0x0        	BCF	STATUS,0
-0001b9   0cbf     rrf     0x3f, 0x1        	RRF	r0x1005,F
+0001bf   1003     bcf     0x03, 0x0        	BCF	STATUS,0
+0001c0   0cbf     rrf     0x3f, 0x1        	RRF	r0x1005,F
                                            ;;shiftRight_Left2ResultLit:5474: shCount=1, size=1, sign=0, same=1, offr=0
-0001ba   1003     bcf     0x03, 0x0        	BCF	STATUS,0
-0001bb   0cbf     rrf     0x3f, 0x1        	RRF	r0x1005,F
-                                           ;	.line	163; "main.c"	r = n - (((q << 2) + q) << 1); return q + (r > 9);
-0001bc   083f     movf    0x3f, 0x0        	MOVF	r0x1005,W
-0001bd   00c0     movwf   0x40             	MOVWF	r0x1006
-0001be   1003     bcf     0x03, 0x0        	BCF	STATUS,0
-0001bf   0d40     rlf     0x40, 0x0        	RLF	r0x1006,W
-0001c0   00c1     movwf   0x41             	MOVWF	r0x1007
 0001c1   1003     bcf     0x03, 0x0        	BCF	STATUS,0
-0001c2   0dc1     rlf     0x41, 0x1        	RLF	r0x1007,F
-0001c3   0840     movf    0x40, 0x0        	MOVF	r0x1006,W
-0001c4   0741     addwf   0x41, 0x0        	ADDWF	r0x1007,W
-0001c5   00c0     movwf   0x40             	MOVWF	r0x1006
-0001c6   1003     bcf     0x03, 0x0        	BCF	STATUS,0
-0001c7   0d40     rlf     0x40, 0x0        	RLF	r0x1006,W
-0001c8   00c1     movwf   0x41             	MOVWF	r0x1007
-0001c9   083e     movf    0x3e, 0x0        	MOVF	r0x1004,W
-0001ca   00c0     movwf   0x40             	MOVWF	r0x1006
-0001cb   0841     movf    0x41, 0x0        	MOVF	r0x1007,W
-0001cc   0240     subwf   0x40, 0x0        	SUBWF	r0x1006,W
-0001cd   00be     movwf   0x3e             	MOVWF	r0x1004
+0001c2   0cbf     rrf     0x3f, 0x1        	RRF	r0x1005,F
+                                           ;	.line	165; "main.c"	r = n - (((q << 2) + q) << 1); return q + (r > 9);
+0001c3   083f     movf    0x3f, 0x0        	MOVF	r0x1005,W
+0001c4   00c0     movwf   0x40             	MOVWF	r0x1006
+0001c5   1003     bcf     0x03, 0x0        	BCF	STATUS,0
+0001c6   0d40     rlf     0x40, 0x0        	RLF	r0x1006,W
+0001c7   00c1     movwf   0x41             	MOVWF	r0x1007
+0001c8   1003     bcf     0x03, 0x0        	BCF	STATUS,0
+0001c9   0dc1     rlf     0x41, 0x1        	RLF	r0x1007,F
+0001ca   0840     movf    0x40, 0x0        	MOVF	r0x1006,W
+0001cb   0741     addwf   0x41, 0x0        	ADDWF	r0x1007,W
+0001cc   00c0     movwf   0x40             	MOVWF	r0x1006
+0001cd   1003     bcf     0x03, 0x0        	BCF	STATUS,0
+0001ce   0d40     rlf     0x40, 0x0        	RLF	r0x1006,W
+0001cf   00c1     movwf   0x41             	MOVWF	r0x1007
+0001d0   083e     movf    0x3e, 0x0        	MOVF	r0x1004,W
+0001d1   00c0     movwf   0x40             	MOVWF	r0x1006
+0001d2   0841     movf    0x41, 0x0        	MOVF	r0x1007,W
+0001d3   0240     subwf   0x40, 0x0        	SUBWF	r0x1006,W
+0001d4   00be     movwf   0x3e             	MOVWF	r0x1004
                                            ;;swapping arguments (AOP_TYPEs 1/2)
                                            ;;unsigned compare: left >= lit(0xA=10), size=1
-0001ce   300a     movlw   0x0a             	MOVLW	0x0a
-0001cf   023e     subwf   0x3e, 0x0        	SUBWF	r0x1004,W
-0001d0   01c0     clrf    0x40             	CLRF	r0x1006
-0001d1   0dc0     rlf     0x40, 0x1        	RLF	r0x1006,F
-0001d2   0840     movf    0x40, 0x0        	MOVF	r0x1006,W
-0001d3   073f     addwf   0x3f, 0x0        	ADDWF	r0x1005,W
-0001d4   00be     movwf   0x3e             	MOVWF	r0x1004
-                                           ;	.line	164; "main.c"	}
-0001d5   0008     return                   	RETURN	
+0001d5   300a     movlw   0x0a             	MOVLW	0x0a
+0001d6   023e     subwf   0x3e, 0x0        	SUBWF	r0x1004,W
+0001d7   01c0     clrf    0x40             	CLRF	r0x1006
+0001d8   0dc0     rlf     0x40, 0x1        	RLF	r0x1006,F
+0001d9   0840     movf    0x40, 0x0        	MOVF	r0x1006,W
+0001da   073f     addwf   0x3f, 0x0        	ADDWF	r0x1005,W
+0001db   00be     movwf   0x3e             	MOVWF	r0x1004
+                                           ;	.line	166; "main.c"	}
+0001dc   0008     return                   	RETURN	
                                            ; exit point of _dividirby10
                                            
                                            ;***
@@ -499,55 +513,55 @@ Address  Value    Disassembly              Source
                                            S_main__delay	code
                                            _delay:
                                            ; 2 exit points
-                                           ;	.line	147; "main.c"	void delay(unsigned int tiempo){
-000201   00b7     movwf   0x37             	MOVWF	r0x1008
-000202   082f     movf    0x2f, 0x0        	MOVF	STK00,W
-000203   00b6     movwf   0x36             	MOVWF	r0x1009
-                                           ;	.line	151; "main.c"	for(i=0; i<tiempo; i++)
-000204   01b8     clrf    0x38             	CLRF	r0x100A
-000205   01b9     clrf    0x39             	CLRF	r0x100B
+                                           ;	.line	149; "main.c"	void delay(unsigned int tiempo){
+000208   00b7     movwf   0x37             	MOVWF	r0x1008
+000209   082f     movf    0x2f, 0x0        	MOVF	STK00,W
+00020a   00b6     movwf   0x36             	MOVWF	r0x1009
+                                           ;	.line	153; "main.c"	for(i=0; i<tiempo; i++)
+00020b   01b8     clrf    0x38             	CLRF	r0x100A
+00020c   01b9     clrf    0x39             	CLRF	r0x100B
                                            _00166_DS_:
-000206   0837     movf    0x37, 0x0        	MOVF	r0x1008,W
-000207   0239     subwf   0x39, 0x0        	SUBWF	r0x100B,W
-000208   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
-000209   2a0c     goto    0x020c           	GOTO	_00187_DS_
-00020a   0836     movf    0x36, 0x0        	MOVF	r0x1009,W
-00020b   0238     subwf   0x38, 0x0        	SUBWF	r0x100A,W
+00020d   0837     movf    0x37, 0x0        	MOVF	r0x1008,W
+00020e   0239     subwf   0x39, 0x0        	SUBWF	r0x100B,W
+00020f   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+000210   2a13     goto    0x0213           	GOTO	_00187_DS_
+000211   0836     movf    0x36, 0x0        	MOVF	r0x1009,W
+000212   0238     subwf   0x38, 0x0        	SUBWF	r0x100A,W
                                            _00187_DS_:
-00020c   1803     btfsc   0x03, 0x0        	BTFSC	STATUS,0
-00020d   2a27     goto    0x0227           	GOTO	_00168_DS_
-                                           ;;genSkipc:3307: created from rifx:0x7ffecf7d5860
-                                           ;	.line	152; "main.c"	for(j=0; j<1275; j++);
-00020e   30fb     movlw   0xfb             	MOVLW	0xfb
-00020f   00ba     movwf   0x3a             	MOVWF	r0x100C
-000210   3004     movlw   0x04             	MOVLW	0x04
-000211   00bb     movwf   0x3b             	MOVWF	r0x100D
+000213   1803     btfsc   0x03, 0x0        	BTFSC	STATUS,0
+000214   2a2e     goto    0x022e           	GOTO	_00168_DS_
+                                           ;;genSkipc:3307: created from rifx:0x7fff48c0f9c0
+                                           ;	.line	154; "main.c"	for(j=0; j<1275; j++);
+000215   30fb     movlw   0xfb             	MOVLW	0xfb
+000216   00ba     movwf   0x3a             	MOVWF	r0x100C
+000217   3004     movlw   0x04             	MOVLW	0x04
+000218   00bb     movwf   0x3b             	MOVWF	r0x100D
                                            _00164_DS_:
-000212   30ff     movlw   0xff             	MOVLW	0xff
-000213   073a     addwf   0x3a, 0x0        	ADDWF	r0x100C,W
-000214   00bc     movwf   0x3c             	MOVWF	r0x100E
-000215   30ff     movlw   0xff             	MOVLW	0xff
-000216   00bd     movwf   0x3d             	MOVWF	r0x100F
-000217   083b     movf    0x3b, 0x0        	MOVF	r0x100D,W
-000218   1803     btfsc   0x03, 0x0        	BTFSC	STATUS,0
-000219   0f3b     incfsz  0x3b, 0x0        	INCFSZ	r0x100D,W
-00021a   07bd     addwf   0x3d, 0x1        	ADDWF	r0x100F,F
-00021b   083c     movf    0x3c, 0x0        	MOVF	r0x100E,W
-00021c   00ba     movwf   0x3a             	MOVWF	r0x100C
-00021d   083d     movf    0x3d, 0x0        	MOVF	r0x100F,W
-00021e   00bb     movwf   0x3b             	MOVWF	r0x100D
-00021f   083d     movf    0x3d, 0x0        	MOVF	r0x100F,W
-000220   043c     iorwf   0x3c, 0x0        	IORWF	r0x100E,W
-000221   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
-000222   2a12     goto    0x0212           	GOTO	_00164_DS_
-                                           ;	.line	151; "main.c"	for(i=0; i<tiempo; i++)
-000223   0ab8     incf    0x38, 0x1        	INCF	r0x100A,F
-000224   1903     btfsc   0x03, 0x2        	BTFSC	STATUS,2
-000225   0ab9     incf    0x39, 0x1        	INCF	r0x100B,F
-000226   2a06     goto    0x0206           	GOTO	_00166_DS_
+000219   30ff     movlw   0xff             	MOVLW	0xff
+00021a   073a     addwf   0x3a, 0x0        	ADDWF	r0x100C,W
+00021b   00bc     movwf   0x3c             	MOVWF	r0x100E
+00021c   30ff     movlw   0xff             	MOVLW	0xff
+00021d   00bd     movwf   0x3d             	MOVWF	r0x100F
+00021e   083b     movf    0x3b, 0x0        	MOVF	r0x100D,W
+00021f   1803     btfsc   0x03, 0x0        	BTFSC	STATUS,0
+000220   0f3b     incfsz  0x3b, 0x0        	INCFSZ	r0x100D,W
+000221   07bd     addwf   0x3d, 0x1        	ADDWF	r0x100F,F
+000222   083c     movf    0x3c, 0x0        	MOVF	r0x100E,W
+000223   00ba     movwf   0x3a             	MOVWF	r0x100C
+000224   083d     movf    0x3d, 0x0        	MOVF	r0x100F,W
+000225   00bb     movwf   0x3b             	MOVWF	r0x100D
+000226   083d     movf    0x3d, 0x0        	MOVF	r0x100F,W
+000227   043c     iorwf   0x3c, 0x0        	IORWF	r0x100E,W
+000228   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+000229   2a19     goto    0x0219           	GOTO	_00164_DS_
+                                           ;	.line	153; "main.c"	for(i=0; i<tiempo; i++)
+00022a   0ab8     incf    0x38, 0x1        	INCF	r0x100A,F
+00022b   1903     btfsc   0x03, 0x2        	BTFSC	STATUS,2
+00022c   0ab9     incf    0x39, 0x1        	INCF	r0x100B,F
+00022d   2a0d     goto    0x020d           	GOTO	_00166_DS_
                                            _00168_DS_:
-                                           ;	.line	153; "main.c"	}
-000227   0008     return                   	RETURN	
+                                           ;	.line	155; "main.c"	}
+00022e   0008     return                   	RETURN	
                                            ; exit point of _delay
                                            
                                            ;***
@@ -560,172 +574,172 @@ Address  Value    Disassembly              Source
                                            S_main__display	code
                                            _display:
                                            ; 2 exit points
-                                           ;	.line	79; "main.c"	void display(unsigned char num){
-00010d   00b5     movwf   0x35             	MOVWF	r0x1010
-                                           ;	.line	81; "main.c"	if (num == 0){
-00010e   0835     movf    0x35, 0x0        	MOVF	r0x1010,W
-00010f   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
-000110   2917     goto    0x0117           	GOTO	_00154_DS_
-                                           ;	.line	82; "main.c"	GP0 = 0;
-000111   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
-000112   1005     bcf     0x05, 0x0        	BCF	_GPIObits,0
-                                           ;	.line	83; "main.c"	GP1 = 0;
-000113   1085     bcf     0x05, 0x1        	BCF	_GPIObits,1
-                                           ;	.line	84; "main.c"	GP2 = 0;
-000114   1105     bcf     0x05, 0x2        	BCF	_GPIObits,2
-                                           ;	.line	85; "main.c"	GP4 = 0;
-000115   1205     bcf     0x05, 0x4        	BCF	_GPIObits,4
-000116   2970     goto    0x0170           	GOTO	_00156_DS_
+                                           ;	.line	81; "main.c"	void display(unsigned char num){
+000114   00b5     movwf   0x35             	MOVWF	r0x1010
+                                           ;	.line	83; "main.c"	if (num == 0){
+000115   0835     movf    0x35, 0x0        	MOVF	r0x1010,W
+000116   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+000117   291e     goto    0x011e           	GOTO	_00154_DS_
+                                           ;	.line	84; "main.c"	GP0 = 0;
+000118   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
+000119   1005     bcf     0x05, 0x0        	BCF	_GPIObits,0
+                                           ;	.line	85; "main.c"	GP1 = 0;
+00011a   1085     bcf     0x05, 0x1        	BCF	_GPIObits,1
+                                           ;	.line	86; "main.c"	GP2 = 0;
+00011b   1105     bcf     0x05, 0x2        	BCF	_GPIObits,2
+                                           ;	.line	87; "main.c"	GP4 = 0;
+00011c   1205     bcf     0x05, 0x4        	BCF	_GPIObits,4
+00011d   2977     goto    0x0177           	GOTO	_00156_DS_
                                            _00154_DS_:
-                                           ;	.line	87; "main.c"	else if (num == 1){
-000117   0835     movf    0x35, 0x0        	MOVF	r0x1010,W
-000118   3a01     xorlw   0x01             	XORLW	0x01
-000119   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
-00011a   2921     goto    0x0121           	GOTO	_00151_DS_
-                                           ;	.line	88; "main.c"	GP0 = 1;
-00011b   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
-00011c   1405     bsf     0x05, 0x0        	BSF	_GPIObits,0
-                                           ;	.line	89; "main.c"	GP1 = 0;
-00011d   1085     bcf     0x05, 0x1        	BCF	_GPIObits,1
-                                           ;	.line	90; "main.c"	GP2 = 0;
-00011e   1105     bcf     0x05, 0x2        	BCF	_GPIObits,2
-                                           ;	.line	91; "main.c"	GP4 = 0;
-00011f   1205     bcf     0x05, 0x4        	BCF	_GPIObits,4
-000120   2970     goto    0x0170           	GOTO	_00156_DS_
+                                           ;	.line	89; "main.c"	else if (num == 1){
+00011e   0835     movf    0x35, 0x0        	MOVF	r0x1010,W
+00011f   3a01     xorlw   0x01             	XORLW	0x01
+000120   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+000121   2928     goto    0x0128           	GOTO	_00151_DS_
+                                           ;	.line	90; "main.c"	GP0 = 1;
+000122   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
+000123   1405     bsf     0x05, 0x0        	BSF	_GPIObits,0
+                                           ;	.line	91; "main.c"	GP1 = 0;
+000124   1085     bcf     0x05, 0x1        	BCF	_GPIObits,1
+                                           ;	.line	92; "main.c"	GP2 = 0;
+000125   1105     bcf     0x05, 0x2        	BCF	_GPIObits,2
+                                           ;	.line	93; "main.c"	GP4 = 0;
+000126   1205     bcf     0x05, 0x4        	BCF	_GPIObits,4
+000127   2977     goto    0x0177           	GOTO	_00156_DS_
                                            _00151_DS_:
-                                           ;	.line	93; "main.c"	else if (num == 2){
-000121   0835     movf    0x35, 0x0        	MOVF	r0x1010,W
-000122   3a02     xorlw   0x02             	XORLW	0x02
-000123   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
-000124   292b     goto    0x012b           	GOTO	_00148_DS_
-                                           ;	.line	94; "main.c"	GP0 = 0;
-000125   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
-000126   1005     bcf     0x05, 0x0        	BCF	_GPIObits,0
-                                           ;	.line	95; "main.c"	GP1 = 1;
-000127   1485     bsf     0x05, 0x1        	BSF	_GPIObits,1
-                                           ;	.line	96; "main.c"	GP2 = 0;
-000128   1105     bcf     0x05, 0x2        	BCF	_GPIObits,2
-                                           ;	.line	97; "main.c"	GP4 = 0;
-000129   1205     bcf     0x05, 0x4        	BCF	_GPIObits,4
-00012a   2970     goto    0x0170           	GOTO	_00156_DS_
+                                           ;	.line	95; "main.c"	else if (num == 2){
+000128   0835     movf    0x35, 0x0        	MOVF	r0x1010,W
+000129   3a02     xorlw   0x02             	XORLW	0x02
+00012a   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+00012b   2932     goto    0x0132           	GOTO	_00148_DS_
+                                           ;	.line	96; "main.c"	GP0 = 0;
+00012c   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
+00012d   1005     bcf     0x05, 0x0        	BCF	_GPIObits,0
+                                           ;	.line	97; "main.c"	GP1 = 1;
+00012e   1485     bsf     0x05, 0x1        	BSF	_GPIObits,1
+                                           ;	.line	98; "main.c"	GP2 = 0;
+00012f   1105     bcf     0x05, 0x2        	BCF	_GPIObits,2
+                                           ;	.line	99; "main.c"	GP4 = 0;
+000130   1205     bcf     0x05, 0x4        	BCF	_GPIObits,4
+000131   2977     goto    0x0177           	GOTO	_00156_DS_
                                            _00148_DS_:
-                                           ;	.line	99; "main.c"	else if (num == 3){
-00012b   0835     movf    0x35, 0x0        	MOVF	r0x1010,W
-00012c   3a03     xorlw   0x03             	XORLW	0x03
-00012d   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
-00012e   2935     goto    0x0135           	GOTO	_00145_DS_
-                                           ;	.line	100; "main.c"	GP0 = 1;
-00012f   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
-000130   1405     bsf     0x05, 0x0        	BSF	_GPIObits,0
-                                           ;	.line	101; "main.c"	GP1 = 1;
-000131   1485     bsf     0x05, 0x1        	BSF	_GPIObits,1
-                                           ;	.line	102; "main.c"	GP2 = 0;
-000132   1105     bcf     0x05, 0x2        	BCF	_GPIObits,2
-                                           ;	.line	103; "main.c"	GP4 = 0;
-000133   1205     bcf     0x05, 0x4        	BCF	_GPIObits,4
-000134   2970     goto    0x0170           	GOTO	_00156_DS_
+                                           ;	.line	101; "main.c"	else if (num == 3){
+000132   0835     movf    0x35, 0x0        	MOVF	r0x1010,W
+000133   3a03     xorlw   0x03             	XORLW	0x03
+000134   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+000135   293c     goto    0x013c           	GOTO	_00145_DS_
+                                           ;	.line	102; "main.c"	GP0 = 1;
+000136   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
+000137   1405     bsf     0x05, 0x0        	BSF	_GPIObits,0
+                                           ;	.line	103; "main.c"	GP1 = 1;
+000138   1485     bsf     0x05, 0x1        	BSF	_GPIObits,1
+                                           ;	.line	104; "main.c"	GP2 = 0;
+000139   1105     bcf     0x05, 0x2        	BCF	_GPIObits,2
+                                           ;	.line	105; "main.c"	GP4 = 0;
+00013a   1205     bcf     0x05, 0x4        	BCF	_GPIObits,4
+00013b   2977     goto    0x0177           	GOTO	_00156_DS_
                                            _00145_DS_:
-                                           ;	.line	105; "main.c"	else if (num == 4){
-000135   0835     movf    0x35, 0x0        	MOVF	r0x1010,W
-000136   3a04     xorlw   0x04             	XORLW	0x04
-000137   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
-000138   293f     goto    0x013f           	GOTO	_00142_DS_
-                                           ;	.line	106; "main.c"	GP0 = 0;
-000139   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
-00013a   1005     bcf     0x05, 0x0        	BCF	_GPIObits,0
-                                           ;	.line	107; "main.c"	GP1 = 0;
-00013b   1085     bcf     0x05, 0x1        	BCF	_GPIObits,1
-                                           ;	.line	108; "main.c"	GP2 = 1;
-00013c   1505     bsf     0x05, 0x2        	BSF	_GPIObits,2
-                                           ;	.line	109; "main.c"	GP4 = 0;
-00013d   1205     bcf     0x05, 0x4        	BCF	_GPIObits,4
-00013e   2970     goto    0x0170           	GOTO	_00156_DS_
+                                           ;	.line	107; "main.c"	else if (num == 4){
+00013c   0835     movf    0x35, 0x0        	MOVF	r0x1010,W
+00013d   3a04     xorlw   0x04             	XORLW	0x04
+00013e   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+00013f   2946     goto    0x0146           	GOTO	_00142_DS_
+                                           ;	.line	108; "main.c"	GP0 = 0;
+000140   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
+000141   1005     bcf     0x05, 0x0        	BCF	_GPIObits,0
+                                           ;	.line	109; "main.c"	GP1 = 0;
+000142   1085     bcf     0x05, 0x1        	BCF	_GPIObits,1
+                                           ;	.line	110; "main.c"	GP2 = 1;
+000143   1505     bsf     0x05, 0x2        	BSF	_GPIObits,2
+                                           ;	.line	111; "main.c"	GP4 = 0;
+000144   1205     bcf     0x05, 0x4        	BCF	_GPIObits,4
+000145   2977     goto    0x0177           	GOTO	_00156_DS_
                                            _00142_DS_:
-                                           ;	.line	111; "main.c"	else if (num == 5){
-00013f   0835     movf    0x35, 0x0        	MOVF	r0x1010,W
-000140   3a05     xorlw   0x05             	XORLW	0x05
-000141   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
-000142   2949     goto    0x0149           	GOTO	_00139_DS_
-                                           ;	.line	112; "main.c"	GP0 = 1;
-000143   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
-000144   1405     bsf     0x05, 0x0        	BSF	_GPIObits,0
-                                           ;	.line	113; "main.c"	GP1 = 0;
-000145   1085     bcf     0x05, 0x1        	BCF	_GPIObits,1
-                                           ;	.line	114; "main.c"	GP2 = 1;
-000146   1505     bsf     0x05, 0x2        	BSF	_GPIObits,2
-                                           ;	.line	115; "main.c"	GP4 = 0;
-000147   1205     bcf     0x05, 0x4        	BCF	_GPIObits,4
-000148   2970     goto    0x0170           	GOTO	_00156_DS_
+                                           ;	.line	113; "main.c"	else if (num == 5){
+000146   0835     movf    0x35, 0x0        	MOVF	r0x1010,W
+000147   3a05     xorlw   0x05             	XORLW	0x05
+000148   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+000149   2950     goto    0x0150           	GOTO	_00139_DS_
+                                           ;	.line	114; "main.c"	GP0 = 1;
+00014a   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
+00014b   1405     bsf     0x05, 0x0        	BSF	_GPIObits,0
+                                           ;	.line	115; "main.c"	GP1 = 0;
+00014c   1085     bcf     0x05, 0x1        	BCF	_GPIObits,1
+                                           ;	.line	116; "main.c"	GP2 = 1;
+00014d   1505     bsf     0x05, 0x2        	BSF	_GPIObits,2
+                                           ;	.line	117; "main.c"	GP4 = 0;
+00014e   1205     bcf     0x05, 0x4        	BCF	_GPIObits,4
+00014f   2977     goto    0x0177           	GOTO	_00156_DS_
                                            _00139_DS_:
-                                           ;	.line	118; "main.c"	else if (num == 6){
-000149   0835     movf    0x35, 0x0        	MOVF	r0x1010,W
-00014a   3a06     xorlw   0x06             	XORLW	0x06
-00014b   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
-00014c   2953     goto    0x0153           	GOTO	_00136_DS_
-                                           ;	.line	119; "main.c"	GP0 = 0;
-00014d   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
-00014e   1005     bcf     0x05, 0x0        	BCF	_GPIObits,0
-                                           ;	.line	120; "main.c"	GP1 = 1;
-00014f   1485     bsf     0x05, 0x1        	BSF	_GPIObits,1
-                                           ;	.line	121; "main.c"	GP2 = 1;
-000150   1505     bsf     0x05, 0x2        	BSF	_GPIObits,2
-                                           ;	.line	122; "main.c"	GP4 = 0;    
-000151   1205     bcf     0x05, 0x4        	BCF	_GPIObits,4
-000152   2970     goto    0x0170           	GOTO	_00156_DS_
+                                           ;	.line	120; "main.c"	else if (num == 6){
+000150   0835     movf    0x35, 0x0        	MOVF	r0x1010,W
+000151   3a06     xorlw   0x06             	XORLW	0x06
+000152   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+000153   295a     goto    0x015a           	GOTO	_00136_DS_
+                                           ;	.line	121; "main.c"	GP0 = 0;
+000154   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
+000155   1005     bcf     0x05, 0x0        	BCF	_GPIObits,0
+                                           ;	.line	122; "main.c"	GP1 = 1;
+000156   1485     bsf     0x05, 0x1        	BSF	_GPIObits,1
+                                           ;	.line	123; "main.c"	GP2 = 1;
+000157   1505     bsf     0x05, 0x2        	BSF	_GPIObits,2
+                                           ;	.line	124; "main.c"	GP4 = 0;    
+000158   1205     bcf     0x05, 0x4        	BCF	_GPIObits,4
+000159   2977     goto    0x0177           	GOTO	_00156_DS_
                                            _00136_DS_:
-                                           ;	.line	124; "main.c"	else if (num == 7){
-000153   0835     movf    0x35, 0x0        	MOVF	r0x1010,W
-000154   3a07     xorlw   0x07             	XORLW	0x07
-000155   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
-000156   295d     goto    0x015d           	GOTO	_00133_DS_
-                                           ;	.line	125; "main.c"	GP0 = 1;
-000157   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
-000158   1405     bsf     0x05, 0x0        	BSF	_GPIObits,0
-                                           ;	.line	126; "main.c"	GP1 = 1;
-000159   1485     bsf     0x05, 0x1        	BSF	_GPIObits,1
-                                           ;	.line	127; "main.c"	GP2 = 1;
-00015a   1505     bsf     0x05, 0x2        	BSF	_GPIObits,2
-                                           ;	.line	128; "main.c"	GP4 = 0;
-00015b   1205     bcf     0x05, 0x4        	BCF	_GPIObits,4
-00015c   2970     goto    0x0170           	GOTO	_00156_DS_
+                                           ;	.line	126; "main.c"	else if (num == 7){
+00015a   0835     movf    0x35, 0x0        	MOVF	r0x1010,W
+00015b   3a07     xorlw   0x07             	XORLW	0x07
+00015c   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+00015d   2964     goto    0x0164           	GOTO	_00133_DS_
+                                           ;	.line	127; "main.c"	GP0 = 1;
+00015e   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
+00015f   1405     bsf     0x05, 0x0        	BSF	_GPIObits,0
+                                           ;	.line	128; "main.c"	GP1 = 1;
+000160   1485     bsf     0x05, 0x1        	BSF	_GPIObits,1
+                                           ;	.line	129; "main.c"	GP2 = 1;
+000161   1505     bsf     0x05, 0x2        	BSF	_GPIObits,2
+                                           ;	.line	130; "main.c"	GP4 = 0;
+000162   1205     bcf     0x05, 0x4        	BCF	_GPIObits,4
+000163   2977     goto    0x0177           	GOTO	_00156_DS_
                                            _00133_DS_:
-                                           ;	.line	130; "main.c"	else if (num == 8){
-00015d   0835     movf    0x35, 0x0        	MOVF	r0x1010,W
-00015e   3a08     xorlw   0x08             	XORLW	0x08
-00015f   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
-000160   2967     goto    0x0167           	GOTO	_00130_DS_
-                                           ;	.line	131; "main.c"	GP0 = 0;
-000161   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
-000162   1005     bcf     0x05, 0x0        	BCF	_GPIObits,0
-                                           ;	.line	132; "main.c"	GP1 = 0;
-000163   1085     bcf     0x05, 0x1        	BCF	_GPIObits,1
-                                           ;	.line	133; "main.c"	GP2 = 0;
-000164   1105     bcf     0x05, 0x2        	BCF	_GPIObits,2
-                                           ;	.line	134; "main.c"	GP4 = 1;
-000165   1605     bsf     0x05, 0x4        	BSF	_GPIObits,4
-000166   2970     goto    0x0170           	GOTO	_00156_DS_
+                                           ;	.line	132; "main.c"	else if (num == 8){
+000164   0835     movf    0x35, 0x0        	MOVF	r0x1010,W
+000165   3a08     xorlw   0x08             	XORLW	0x08
+000166   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+000167   296e     goto    0x016e           	GOTO	_00130_DS_
+                                           ;	.line	133; "main.c"	GP0 = 0;
+000168   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
+000169   1005     bcf     0x05, 0x0        	BCF	_GPIObits,0
+                                           ;	.line	134; "main.c"	GP1 = 0;
+00016a   1085     bcf     0x05, 0x1        	BCF	_GPIObits,1
+                                           ;	.line	135; "main.c"	GP2 = 0;
+00016b   1105     bcf     0x05, 0x2        	BCF	_GPIObits,2
+                                           ;	.line	136; "main.c"	GP4 = 1;
+00016c   1605     bsf     0x05, 0x4        	BSF	_GPIObits,4
+00016d   2977     goto    0x0177           	GOTO	_00156_DS_
                                            _00130_DS_:
-                                           ;	.line	136; "main.c"	else if (num == 9){
-000167   0835     movf    0x35, 0x0        	MOVF	r0x1010,W
-000168   3a09     xorlw   0x09             	XORLW	0x09
-000169   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
-00016a   2970     goto    0x0170           	GOTO	_00156_DS_
-                                           ;	.line	137; "main.c"	GP0 = 1;
-00016b   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
-00016c   1405     bsf     0x05, 0x0        	BSF	_GPIObits,0
-                                           ;	.line	138; "main.c"	GP1 = 0;
-00016d   1085     bcf     0x05, 0x1        	BCF	_GPIObits,1
-                                           ;	.line	139; "main.c"	GP2 = 0;
-00016e   1105     bcf     0x05, 0x2        	BCF	_GPIObits,2
-                                           ;	.line	140; "main.c"	GP4 = 1;
-00016f   1605     bsf     0x05, 0x4        	BSF	_GPIObits,4
+                                           ;	.line	138; "main.c"	else if (num == 9){
+00016e   0835     movf    0x35, 0x0        	MOVF	r0x1010,W
+00016f   3a09     xorlw   0x09             	XORLW	0x09
+000170   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+000171   2977     goto    0x0177           	GOTO	_00156_DS_
+                                           ;	.line	139; "main.c"	GP0 = 1;
+000172   1283     bcf     0x03, 0x5        	BANKSEL	_GPIObits
+000173   1405     bsf     0x05, 0x0        	BSF	_GPIObits,0
+                                           ;	.line	140; "main.c"	GP1 = 0;
+000174   1085     bcf     0x05, 0x1        	BCF	_GPIObits,1
+                                           ;	.line	141; "main.c"	GP2 = 0;
+000175   1105     bcf     0x05, 0x2        	BCF	_GPIObits,2
+                                           ;	.line	142; "main.c"	GP4 = 1;
+000176   1605     bsf     0x05, 0x4        	BSF	_GPIObits,4
                                            _00156_DS_:
-                                           ;	.line	144; "main.c"	}
-000170   0008     return                   	RETURN	
+                                           ;	.line	146; "main.c"	}
+000177   0008     return                   	RETURN	
                                            ; exit point of _display
                                            
                                            
                                            ;	code size estimation:
-                                           ;	  291+   50 =   341 instructions (  782 byte)
+                                           ;	  298+   50 =   348 instructions (  796 byte)
                                            
                                            	end

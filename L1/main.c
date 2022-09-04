@@ -27,12 +27,14 @@ unsigned char main(){
         if (num0 >= 100){
             num0 = 0;
         }   
-        if (num0 >= 9){
-            num1 = 0;
-            num2 = 9;
-        }
+
         num1 = dividirby10(num0);
         num2 = residuo(num0, 10, num1);
+
+        if (num0 <= 9){
+            num1 = num0;
+            num2 = 0;
+        }
 
         if(GP3 == 1){
             if(sumar == 0){
