@@ -5,22 +5,22 @@ typedef unsigned int word;
 word __at 0x2007 __CONFIG = (_WDT_OFF & _MCLRE_OFF);
 
 void delay (unsigned int tiempo);
-void display(int num);
-int random();
+void display(unsigned char num);
+unsigned char random();
 
 int main(){
     TRISIO = 0b00001000; 
     ANSEL  = 0x00;  
     CMCON  = 0x07; 
     VRCON  = 0x00;  
-    int num1 = 2;
-    int num2 = 1;
-    int counter = 0;
-    int bandera;
+    unsigned char num1 = 2;
+    unsigned char num2 = 1;
+    unsigned char counter = 0;
+    unsigned char bandera;
 
     
     while(1){
-        int sumar = 0;
+        unsigned char sumar = 0;
         num1 = num1 + 1;
         num2 = num2 + 1;
         if (num1 >= 10){
@@ -73,7 +73,7 @@ int main(){
 }
 
 
-void display(int num){
+void display(unsigned char num){
 
     if (num == 0){
         GP0 = 0;
