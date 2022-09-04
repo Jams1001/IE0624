@@ -16,6 +16,7 @@ int main(){
     int num1 = 2;
     int num2 = 1;
     int counter = 0;
+    int bandera;
 
     
     while(1){
@@ -34,6 +35,10 @@ int main(){
                 counter++;
                 sumar = 1;
             }
+            if(bandera == 1){
+                counter = 0;
+                bandera = 0;
+            }
             while (GP3 == 1){
                 display(num1);
                 GP5 = 1;
@@ -43,13 +48,14 @@ int main(){
                 delay(2);
 			}
         }
-        if(counter == 3){
+        if(counter == 15){
             display(9);
             GP5 = 0;
 			delay(1);
 			display(9);
             GP5 = 1;
 			delay(1);
+            bandera = 1;
         }
         else{
             GP0 = 0;
