@@ -1,0 +1,24 @@
+\begin{abstract}
+   En este laboratorio se desarrolló un cruce de semáforo simplificado, conformado por un par de semáforos peatonales y uno vehicular, como se puede observar en la figura \ref{cruce_semaforos}. Dicho sistema debía replicar el comportamiento mostrado en la figura \ref{diagrama_temporizacion} para validar su funcionamiento. Para ello se implementó una máquina de estados a través de un microcontrolador ATtiny4313. Dicha máquina se diseñó con 5 entradas, conformadas por 2 pulsadores, 2 temporizadores y un contador. Además cuenta con 4 salidas que representan las luces de los semáforos, y posee un total de 8 estados. Por lo tanto, la máquina requiere de 2 bits de entrada, ya que únicamente los pulsadores constituyen entradas externas del sistema. Añadido a esto, la máquina necesita 3 bits para disponer de 8 combinaciones distintas que identifiquen cada estado. 
+   
+   \vspace{0.25cm}
+   
+   Por otro lado, el circuito diseñado para este laboratorio tiene una serie de leds que representan las luces de los semáforos, cada uno acompañado por una resistencia de protección. El circuito también cuenta con un filtro pasivo hecho con una resistencia y un capacitor. Dicho filtro se agregó con el fin de eliminar el factor del ``bouncing'' de los pulsadores.
+\end{abstract}
+
+Link del Proyecto: \faGithub   \hspace{0.5mm}\href{https://github.com/Jams1001/IE0624}{Laboratorio 2} \texttt{(commit ID: 557e72558ad1d2f7dc66278eb974336c50668273)}\footnote{\textbf{\textit{Nota: }}Path: \textit{https://github.com/Jams1001/IE0624/L2/}}
+%\keywords{FEM}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.575\textwidth]{images/cruce_semaforos.png}
+    \caption{Cruce de semáforos simplificado}
+    \label{cruce_semaforos}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{images/diagrama_temporizacion.png}
+    \caption{Diagrama de temporización del cruce de semáforos}
+    \label{diagrama_temporizacion}
+\end{figure}
