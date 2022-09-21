@@ -18,11 +18,11 @@ Por otro lado, el circuito diseñado para este laboratorio tiene una serie de le
 - Jorge Adán Mora Soto, B95222 [@Jams1001](https://github.com/Jams1001)
 ## Resumen
 
-El circuito diseñado para este laboartorio se muestra a continuación:
+El circuito diseñado para este laboratorio se muestra a continuación:
 
 [![circuito-semaforo.png](https://i.postimg.cc/hjnK97KV/circuito-semaforo.png)](https://postimg.cc/f3H4sytb)
 
-Cuando un usuario presiona cualquiera de los pulsadores del circuito el microcontrolador guarda la solicitud en su memoria. Entonces una vez que hayan transcurrido al menos 10 segundos de paso de vehículos, los semáforos iniciarán el cambio de luces para detener a los vehículos y permitir el paso de peatones. El resto de la secuencia se ejecuta independientemente del estado de los pulsadores, ya que están limitados únicamente por los periodos de tiempo establecidos. En la siguiente etapa la luz verde del semáforo vehicular parpadeará por 3 segundos, para que a continuación todos los semáforos del cruce cambien a luz roja por un segundo. Después la luz verde de los semáforos peatonales se encenderá por solo 10 segundos, para posteriormente parpadear por 3 segundos. Nuevamente, todos los semáforos encenderán sus luces rojas por un segundo y finalmente el sistema volverá al estado inicial, encendiendo la luz verde del semáforo vehicular y las luces rojas de los peatonales.
+Cuando un usuario presiona cualquiera de los pulsadores del circuito el microcontrolador guarda la solicitud en su memoria. Entonces una vez que hayan transcurrido al menos 10 segundos de paso de vehículos, los semáforos iniciarán el cambio de luces para detener a los vehículos y permitir el paso de peatones. El resto de la secuencia se ejecuta independientemente del estado de los pulsadores, ya que está limitada únicamente por los periodos de tiempo establecidos. En la siguiente etapa la luz verde del semáforo vehicular parpadeará por 3 segundos, para que a continuación todos los semáforos del cruce cambien a luz roja por un segundo. Después la luz verde de los semáforos peatonales se encenderá por solo 10 segundos, para posteriormente parpadear por 3 segundos. Nuevamente, todos los semáforos encenderán sus luces rojas por un segundo y finalmente el sistema volverá al estado inicial, encendiendo la luz verde del semáforo vehicular y las luces rojas de los peatonales.
 
 En las siguientes imágenes se presentan los 5 estados en orden del cruce de semáforos diseñado:
 
