@@ -2,6 +2,7 @@
 #include <avr/interrupt.h>
 #include<util/delay.h>
 
+// struct que define los miembros que componen cada estado de la máquina
 typedef struct Semaforo{
   void (*state_func_ptr)(void); // Puntero a las funciones de salida de cada estado
   int time; // Tiempo de duración de cada estado
@@ -37,6 +38,7 @@ void E_out(void){
 #define D 3 // Paso de peatones por 10 segundos
 #define E 4 // Parpadeo de luces de semáforos peatonales
 
+// Se define la máquina conformada por 5 estados
 FSM semaforo[5] = {
   {&A_out, 10},
   {&B_out, 3},
@@ -45,6 +47,7 @@ FSM semaforo[5] = {
   {&E_out, 3},
 };
 
+// Configuración del timer
 void timer_setup() {
   TCCR0A=0x00; // Modo normal
   TCCR0B=0x00; 
@@ -54,21 +57,20 @@ void timer_setup() {
   TIMSK|=(1<<TOIE0); // Se habilita la interrupción del timer1
 }
 
-int B1;
-unsigned char current_state, state;
-int int_count;
-int sec;
-int TVP;
-int TI;
-int pass_flag;
-int C3;
+int B1_B2; // Estado de los pulsadores
+unsigned char state; // Estado la máquina
+int int_count; // Contador de timer
+int TVP; // Contador de 10 segundos
+int TI; // Contador de 1 segundo
+int pass_flag; // Indicador de paso (vehículos o peatones)
 
 ISR (INT1_vect) {     
-  B1 = 1;
+  B1_B2 = 1;
 }
 
-ISR (TIMER0_OVF_vect){      //Interrupt vector for Timer0
-  if((int_count) == 1 || (int_count == 15)){ // cuenta de medio segundo
+// Interrupt vector para Timer0
+ISR (TIMER0_OVF_vect){
+  if((int_count) == 1 || (int_count == 15)){ // Cuenta de medio segundo
     if(state == B){
       (semaforo[B].state_func_ptr)(); // Llamado a salidas de estado B
     }
@@ -78,7 +80,6 @@ ISR (TIMER0_OVF_vect){      //Interrupt vector for Timer0
   }
   else if(int_count == 30){ // cuenta de un segundo
     ++TI;
-    ++C3;
     int_count = 0;
   }
   if(TI == 10){
@@ -92,41 +93,36 @@ int main(void){
   GIMSK = 0x80; // Habilitando la interrupción externa en INT1  
   MCUCR = 0x08; // Interrupción generada por el flanco decreciente en INT1
   PORTB = 0x00; // Se setean todas las salidas en estado bajo (y se activan las resistencias de pull-up de todas las entradas)
-  timer_setup();
+  timer_setup(); // Llamado a configuración del timer
 
-  current_state = A;
+  // Inicialización de las variables
   state = A;
-  B1 = 0;
+  B1_B2 = 0;
   TVP = 0;
   TI = 0;
   int_count = 0;
-  sec = 0;
-  C3 = 0;
   pass_flag = 0;
 
+  // Ejecución en un bucle infinito de la máquina de estados
   while(1){
     switch (state){
       case A:
         (semaforo[A].state_func_ptr)();
-        if ((B1 == 1)&&(TVP >= semaforo[A].time)){
+        if ((B1_B2 == 1)&&(TVP >= semaforo[A].time)){
           state = B;
           int_count = 0;
           TVP = 0;
-          C3 = 0;
           TI = 0;
-          B1 = 0;
-          //(semaforo[B].state_func_ptr)();
         }
         else {
           state = A;
         }
         break;
       case B:
-        if(C3 == semaforo[B].time){
+        if(TI == semaforo[B].time){
           state = C;
           int_count = 0;
           TVP = 0;
-          C3 = 0;
           TI = 0;
           pass_flag = 0;
         }
@@ -139,7 +135,6 @@ int main(void){
         if(TI == semaforo[C].time){
           int_count = 0;
           TVP = 0;
-          C3 = 0;
           TI = 0;
           if(pass_flag == 0){
             state = D;
@@ -158,7 +153,6 @@ int main(void){
           state = E;
           int_count = 0;
           TVP = 0;
-          C3 = 0;
           TI = 0;
         }
         else {
@@ -166,12 +160,12 @@ int main(void){
         }
         break;
       case E:
-        if(C3 == semaforo[E].time){
+        if(TI == semaforo[E].time){
           state = C;
           int_count = 0;
           TVP = 0;
-          C3 = 0;
           TI = 0;
+          B1_B2 = 0;
           pass_flag = 1;
         }
         else{
