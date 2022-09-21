@@ -33,17 +33,29 @@ Permite habilitar y deshabilitar interrupciones. Habilitando estos registros ent
 Permita la manera en la que se habilitan las interrupciones, ya sea por flanco creciente o decreciente \cite{datasheet}.
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.9]{./images/MCUCR.png} 
+\includegraphics[scale=1]{./images/MCUCR.png} 
 \caption{Diagrama de registro MCUCR \cite{datasheet}.}
 \label{f1}
 \end{figure}
 
-\subsubsection{Registro TCCR0x}
-en donde x puede ser A o B.
+\subsubsection{Registro TCCR0x - Timer/Counter Control Register x}
+En donde x puede ser A o B.
 Permite configurar el modo de operación para la utilización de timers. Más específicamente permite modificar el prescaler de los timers A continuación se presenta un ejemplo del diagrama para el registro TCCR0A.  \cite{datasheet}.
+
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.8]{./images/TCCR0A.png} 
 \caption{Diagrama de registro TCCR0A. \cite{datasheet}.}
+\label{f1}
+\end{figure}
+
+\subsubsection{Registro TIMSK - Timer/Counter Interrupt Mask Register}
+
+En este registro únicamente se escribió un 1 en el Bit 1 - TOIE0. De esta manera se activa el temporizador por interrupción, permitiendo la generación de una interrupción interna cuando se produce un overflow del contador \cite{datasheet}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=1]{./images/TIMSK.png} 
+\caption{Diagrama de registro TIMSK. \cite{datasheet}.}
 \label{f1}
 \end{figure}
