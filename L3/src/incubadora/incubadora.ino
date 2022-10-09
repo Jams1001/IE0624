@@ -1,4 +1,6 @@
+
 #include <PID_v1.h>
+#include <Adafruit_PCD8544.h>
 
 // Definición de pines
 int CLK           = 2;
@@ -9,7 +11,7 @@ int RST           = 6;
 int BLUE          = 7;
 int RED           = 8;
 int CALENTADOR    = 9;  
-int SWITCH        = 12;
+int SWITCH        = 13;
 int TERMISTOR     = A0;
 int HUMEDAD       = A1;
 int POTENCIOMETRO = A2;
@@ -21,6 +23,7 @@ float Humedad, Temperatura_Operacion, Temperatura_Termistor, Temperatura_Calenta
 
 
 void setup() { 
+   Serial.begin(9600)
    pinMode(CLK, OUTPUT);
    pinMode(DIN, OUTPUT); 
    pinMode(DC, OUTPUT); 
@@ -28,21 +31,27 @@ void setup() {
    pinMode(RST, OUTPUT); 
    pinMode(BLUE, OUTPUT); 
    pinMode(RED, OUTPUT);
-   pinMode(SWITCH, OUTPUT);      
+   pinMode(SWITCH, INPUT);      
    	
 } 
 void loop() {
 
 Temperatura_Termistor_A = analogRead(TERMISTOR);
 Temperatura_Termistor = map(Temperatura_Termistor_A, 0, 1023, 0, 80); 
+Serial.println(Temperatura_Termistor);
 
 Humedad_A = analogRead(HUMEDAD);
 Humedad = map(Humedad_A, 0, 1023, 0, 100); 
+Serial.println(Humedad);
 
 Temperatura_Operacion_A = analogRead(POTENCIOMETRO);
 Temperatura_Operacion = map(Temperatura_Operacion_A, 0, 1023, 0, 80); 
+Serial.println(Temperatura_Operacion);
 
-// Temperatura_Calentador = analogWrite(CALENTADOR);
+
+Temperatura_Calentador = analogWrite(CALENTADOR, 200);
+Serial.println(Temperatura_Calentador);
+
 
 // LEDs
 if (Temperatura_Termistor <= 30){
@@ -63,4 +72,5 @@ else {
 // Pantalla LCD
 digitalWrite(CS, LOW);	
 } 
- 
+
+//socat PTY,link=/tmp/ttyS0,raw,echo=0 PTY,link=/tmp/ttyS1,raw,echo=1
