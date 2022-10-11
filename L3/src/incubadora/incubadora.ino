@@ -12,7 +12,7 @@ int RST           = 6;
 int BLUE          = 7;
 int RED           = 8;
 int CALENTADOR    = 9;  
-int SWITCH        = 13;
+int SWITCH        = 12;
 int TERMISTOR     = A0;
 int HUMEDAD       = A1;
 int POTENCIOMETRO = A2;
@@ -48,20 +48,15 @@ void loop() {
 
 Temperatura_Termistor_A = analogRead(TERMISTOR);
 Temperatura_Termistor = map(Temperatura_Termistor_A, 0, 1023, 0, 80); 
-Serial.println(Temperatura_Termistor);
 
 Humedad_A = analogRead(HUMEDAD);
 Humedad = map(Humedad_A, 0, 1023, 0, 100); 
-Serial.println(Humedad);
 
 Temperatura_Operacion_A = analogRead(POTENCIOMETRO);
 Temperatura_Operacion = map(Temperatura_Operacion_A, 0, 1023, 0, 80); 
-Serial.println(Temperatura_Operacion);
 
 // La funcion analogWrite no devuelve nada
 analogWrite(CALENTADOR, 200);
-//Temperatura_Calentador = analogWrite(CALENTADOR, 200);
-// Serial.println(Temperatura_Calentador);
 
 display.clearDisplay();
 display.setCursor(0,0);
@@ -96,6 +91,27 @@ if (Temperatura_Termistor >= 42){
 else {
    digitalWrite(RED, LOW);
 }
+
+ // Habilitador de la comunicación con la PC
+ if(digitalRead(SWITCH) == HIGH){  
+    Serial.print(Temperatura_Termistor);
+    Serial.print(",");
+    Serial.print(Humedad);
+    Serial.print(",");
+    Serial.print(Temperatura_Operacion);
+    Serial.print(",");
+    Serial.println(Ctrl_sgn);
+   }
+   else {
+    Serial.print("NULL");
+    Serial.print(",");
+    Serial.print("NULL");
+    Serial.print(",");
+    Serial.print("NULL");
+    Serial.print(",");
+    Serial.println("NULL");
+   }
+
 } 
 
 //socat PTY,link=/tmp/ttyS0,raw,echo=0 PTY,link=/tmp/ttyS1,raw,echo=1
