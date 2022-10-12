@@ -2,6 +2,7 @@
 #include <SPI.h>
 #include <Adafruit_PCD8544.h>
 #include <Adafruit_GFX.h>
+#include <math.h>
 
 // Definición de pines
 int CLK           = 2;
@@ -16,11 +17,25 @@ int SWITCH        = 12;
 int TERMISTOR     = A0;
 int HUMEDAD       = A1;
 int POTENCIOMETRO = A2;
+int Kp = 2;
+int Ki = 5;
+int Kd = 1;
 
+// Definicion de constantes
+int Resistencia = 10000;
+float A = 1.11492089e-3;
+float B = 2.372075385e-4;
+float C = 6.954079529e-8;
 
 // Definición de variables
-int Humedad_A, Temperatura_Operacion_A, Temperatura_Termistor_A, Ctrl_sgn;
-float Humedad, Temperatura_Operacion, Temperatura_Termistor, Temperatura_Calentador;
+int Temperatura_Operacion_A, Humedad_A;
+double temp_ac, setPoint, ctrl_sgn, output_sgn;
+float V_term, R_term, T_term, Humedad, logR;
+
+float K = 2.5; //factor de disipacion en mW/C
+
+// Controlador PID
+PID pid(&temp_ac, &ctrl_sgn, &setPoint, Kp, Ki, Kd, DIRECT);
 
 // Objeto PCD para conectar y escribir datos al display LCD
 Adafruit_PCD8544 display = Adafruit_PCD8544(CLK,DIN,DC,CS,RST);
@@ -36,71 +51,97 @@ void setup() {
    pinMode(RED, OUTPUT);
    pinMode(SWITCH, INPUT);
 
-   Temperatura_Operacion = 0;
-   Ctrl_sgn = 0;
-   Temperatura_Termistor = 0;
+   Temperatura_Operacion_A = analogRead(POTENCIOMETRO);
+   setPoint = map(Temperatura_Operacion_A, 0, 1023, 0, 80);
+   
+   output_sgn = 0;
+   
+   V_term = analogRead(TERMISTOR)*5/1023;
+   R_term = V_term*Resistencia/(5-V_term);
+   logR = log(R_term);
+   T_term = 1.0 /(A+B*logR+C*logR*logR*logR);
+   temp_ac = (T_term - V_term*V_term/(K * R_term)*1000) - 273.15;
+   
    Humedad = 0;
 
+   pid.SetMode(AUTOMATIC);
+
    display.begin();
-   delay(1000);
 } 
 void loop() {
 
-Temperatura_Termistor_A = analogRead(TERMISTOR);
-Temperatura_Termistor = map(Temperatura_Termistor_A, 0, 1023, 0, 80); 
+  Temperatura_Operacion_A = analogRead(POTENCIOMETRO);
+  setPoint = map(Temperatura_Operacion_A, 0, 1023, 0, 80);
+  delay(500);
+  
+  Humedad_A = analogRead(HUMEDAD);
+  Humedad = map(Humedad_A, 0, 1023, 0, 100);
+  delay(500);
 
-Humedad_A = analogRead(HUMEDAD);
-Humedad = map(Humedad_A, 0, 1023, 0, 100); 
+  V_term = analogRead(TERMISTOR);
+  V_term = analogRead(TERMISTOR)*5/1023;
+  R_term = V_term*Resistencia/(5-V_term);
+  logR = log(R_term);
+  T_term = 1.0 /(A+B*logR+C*logR*logR*logR);
+  temp_ac = (T_term - V_term*V_term/(K * R_term)*1000) - 273.15;
+  delay(500);
 
-Temperatura_Operacion_A = analogRead(POTENCIOMETRO);
-Temperatura_Operacion = map(Temperatura_Operacion_A, 0, 1023, 0, 80); 
+  pid.Compute();
 
-// La funcion analogWrite no devuelve nada
-analogWrite(CALENTADOR, 200);
+  if(ctrl_sgn > 100){
+    ctrl_sgn = 100;
+  }
+  else if(ctrl_sgn < 0){
+    ctrl_sgn = 0;
+  }
+  
+  output_sgn = ctrl_sgn*255/100;
+  analogWrite(CALENTADOR, output_sgn);
+  delay(500);
+  
+  display.clearDisplay();
+  display.setCursor(0,0);
+  // Imprime temperatura de operacion en el display
+  display.print("Temp op: "); 
+  display.println(setPoint);
+  
+  // Imprime salida del controlador en el display
+  display.print("Ctrl sgn: "); 
+  display.println(ctrl_sgn);
+  
+  // Imprime temperatura actual en el display
+  display.print("Temp ac: ");
+  display.println(temp_ac);
+  
+  // Imprime humedad actual en el display
+  display.print("Humd: ");
+  display.println(Humedad);
+  
+  display.display();
+  
+  // LEDs
+  if (temp_ac <= 30){
+     digitalWrite(BLUE, HIGH);
+  }
+  else {
+     digitalWrite(BLUE, LOW);
+  }
+  if (temp_ac >= 42){
+     digitalWrite(RED, HIGH);
+  }
+  else {
+     digitalWrite(RED, LOW);
+  }
 
-display.clearDisplay();
-display.setCursor(0,0);
-// Imprime temperatura de operacion en el display
-display.print("Temp op: "); 
-display.println(Temperatura_Operacion);
-
-// Imprime salida del controlador en el display
-display.print("Ctrl sgn: "); 
-display.println(Ctrl_sgn);
-
-// Imprime temperatura actual en el display
-display.print("Temp ac: ");
-display.println(Temperatura_Termistor);
-
-// Imprime humedad actual en el display
-display.print("Humd: ");
-display.println(Humedad);
-
-display.display();
-
-// LEDs
-if (Temperatura_Termistor <= 30){
-   digitalWrite(BLUE, HIGH);
-}
-else {
-   digitalWrite(BLUE, LOW);
-}
-if (Temperatura_Termistor >= 42){
-   digitalWrite(RED, HIGH);
-}
-else {
-   digitalWrite(RED, LOW);
-}
-
- // Habilitador de la comunicación con la PC
+  // Habilitador de la comunicación con la PC
  if(digitalRead(SWITCH) == HIGH){  
-    Serial.print(Temperatura_Termistor);
+    Serial.print(temp_ac);
     Serial.print(",");
     Serial.print(Humedad);
     Serial.print(",");
-    Serial.print(Temperatura_Operacion);
+    Serial.print(setPoint);
     Serial.print(",");
-    Serial.println(Ctrl_sgn);
+    Serial.println(ctrl_sgn);
    }
    else {
     Serial.print("NULL");
@@ -111,7 +152,6 @@ else {
     Serial.print(",");
     Serial.println("NULL");
    }
-
 } 
 
 //socat PTY,link=/tmp/ttyS0,raw,echo=0 PTY,link=/tmp/ttyS1,raw,echo=1
