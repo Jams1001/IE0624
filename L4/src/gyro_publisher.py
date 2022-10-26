@@ -9,12 +9,11 @@ print(header)
 
 #while(1):
 #    #data = ser.readline().decode('utf-8').replace('\r', "").replace('\n', "")
-#    data = [1, 2, 3, 5]
 #    #data = data.split('\t')
 #
 #    if len(data) >= 3:
 #        print(data)
-data = [1, 2, 3, 5]
+data = [1, 2, 3]
 
 
 def on_connect(client, userdata, flags, rc):
@@ -35,7 +34,7 @@ def on_publish(client, userdata, mid):
 
 #PuertoSerial = serial.Serial(port = '/tmp/ttyACM0') 
 print("Connected to serial port")
-client = mqtt.Client("Jams")
+client = mqtt.Client("B95222")
 client.connected = False
 client.on_connect = on_connect
 client.on_disconnect = on_disconnect
@@ -44,33 +43,20 @@ client.on_publish = on_publish
 broker ="iot.eie.ucr.ac.cr"
 port = 1883
 topic = "v1/devices/me/telemetry"
-device = "SltTX8Dypq3KU8zKJCoW"
+device = "n304FtKg956XPgJMSCl9"
 client.username_pw_set(device)
 client.connect(broker, port)
 dict = dict()
-while client.connected != True:
-    client.loop()
-    time.sleep(2)
-print("Program waits every 10 min to send data to dashboard")
 
 while(1):
     #if(PuertoSerial.in_waiting > 0):
         #input = PuertoSerial.readline()
         #decode = input.decode().replace('\r\n', '')
         #split = decode.split('/')
-        dict["Temperature"] = data[0]
-        dict["Humidity"] = data[1]
-        dict["Intensity of light(cd)"] = data[2]
-        dict["Wind speed (m/s)"] = data[3]
-        if(int(data [4]) == 0):
-            dict["Active Rain (Yes/No)"] = "Yes"
-        else:
-            dict["Active Rain (Yes/No)"] = "No"
-        
-        if(data[5] == '0'):
-            dict["Battery Level"] = "OK"
-        else:
-            dict["Battery Level"] = "Low battery"
+        dict["x"] = data[0]
+        dict["y"] = data[1]
+        dict["z"] = data[2]
+        time.sleep(2)
         output = json.dumps(dict)
         print(output)
         client.publish(topic, output)
