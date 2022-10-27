@@ -54,8 +54,7 @@ with mp_hands.Hands(
 
                 if((pos > '0.5') and (pos < '0.58')):
 
-                    x, y, w, h = pyautogui.locateOnScreen(next, confidence=0.9)
-                    x_, y_ = (x + w/2, y + h/2)
+                    print("Threshold exceeded")
 
         cv2.imshow('MediaPipe Hands', cv2.flip(image, 1))
         if cv2.waitKey(1) & 0xFF == ord('q'):
