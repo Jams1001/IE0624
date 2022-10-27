@@ -1,8 +1,9 @@
-import serial, time, json
 import paho.mqtt.client as mqtt
+import serial, time, json
+
 
 #ser = serial.Serial(port = '/dev/ttyACM0', baudrate=115200, timeout=1) 
-print("Connected")
+print("Connected to MCU")
 data_rows = []
 header = ['x', 'y', 'z']
 print(header)
@@ -13,23 +14,22 @@ print(header)
 #
 #    if len(data) >= 3:
 #        print(data)
-data = [1, 2, 3]
+data = [1, 4, 3]
 
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         client.connected = True
-        print("Connected succesfully")
+        print("Connected OK")
     else: 
-        print("Not connected, returned code: ", rc)
+        print("Bad connection, returned code: ", rc)
         client.loop_stop()
 def on_disconnect(client, userdata, rc):
     if(rc == 0):
-        print("Disconnection Successful")
+        print("Client disconneted OK")
     else:
         print("System disconnected via code: ", rc)
-def on_publish(client, userdata, mid):
-    print("Message: ", mid, " has left the client")
+
 
 
 #PuertoSerial = serial.Serial(port = '/tmp/ttyACM0') 
@@ -38,7 +38,6 @@ client = mqtt.Client("B95222")
 client.connected = False
 client.on_connect = on_connect
 client.on_disconnect = on_disconnect
-client.on_publish = on_publish
 
 broker ="iot.eie.ucr.ac.cr"
 port = 1883
@@ -49,10 +48,6 @@ client.connect(broker, port)
 dict = dict()
 
 while(1):
-    #if(PuertoSerial.in_waiting > 0):
-        #input = PuertoSerial.readline()
-        #decode = input.decode().replace('\r\n', '')
-        #split = decode.split('/')
         dict["x"] = data[0]
         dict["y"] = data[1]
         dict["z"] = data[2]
@@ -60,6 +55,7 @@ while(1):
         output = json.dumps(dict)
         print(output)
         client.publish(topic, output)
+        client.loop()
 
 
     
