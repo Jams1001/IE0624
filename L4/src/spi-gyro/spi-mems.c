@@ -22,12 +22,19 @@
  */
 
 #include <stdint.h>
+#include <math.h>
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/spi.h>
 #include "clock.h"
 #include "console.h"
+#include "sdram.h"
+#include "lcd-spi.h"
+#include "gfx.h"
 #include <libopencm3/stm32/usart.h> 
+
+/* Convert degrees to radians */
+#define d2r(d) ((d) * 6.2831853 / 360.0)
 
 uint16_t read_reg(int reg);
 void write_reg(uint8_t reg, uint8_t value);
@@ -183,10 +190,12 @@ char *axes[] = { "X: ", "Y: ", "Z: " };
 int main(void)
 {
 	int16_t vecs[3];
-	
+	int p1, p2, p3;
+
 	clock_setup();
 	console_setup(115200);
-    spi_setup();
+
+	spi_setup();
 
     gpio_clear(GPIOC, GPIO1);
 	spi_send(SPI5, GYR_CTRL_REG1); 
@@ -205,6 +214,41 @@ int main(void)
 	gpio_set(GPIOC, GPIO1);
 
     console_puts("X\tY\tZ\n");
+
+	sdram_init();
+	lcd_spi_init();
+	console_puts("LCD Initialized\n");
+	console_puts("Should have a checker pattern, press any key to proceed\n");
+	msleep(2000);
+
+/*	(void) console_getc(1); */
+	gfx_init(lcd_draw_pixel, 240, 320);
+	gfx_fillScreen(LCD_GREY);
+	gfx_fillRoundRect(10, 10, 220, 220, 5, LCD_WHITE);
+	gfx_drawRoundRect(10, 10, 220, 220, 5, LCD_RED);
+	gfx_fillCircle(20, 250, 10, LCD_RED);
+	gfx_fillCircle(120, 250, 10, LCD_GREEN);
+	gfx_fillCircle(220, 250, 10, LCD_BLUE);
+	gfx_setTextSize(2);
+	gfx_setCursor(15, 25);
+	gfx_puts("STM32F4-DISCO");
+	gfx_setTextSize(1);
+	gfx_setCursor(15, 55);
+	gfx_puts("Laboratorio 4: Sismografo");
+	gfx_setCursor(15, 66);
+	gfx_puts("IE-0624 Laboratorio de");
+	gfx_setCursor(15, 77);
+	gfx_puts("Microcontroladores");
+	lcd_show_frame();
+	console_puts("Now it has a bit of structured graphics.\n");
+	console_puts("Press a key for some simple animation.\n");
+	msleep(8000);
+/*	(void) console_getc(1); */
+	gfx_setTextColor(LCD_YELLOW, LCD_BLACK);
+	gfx_setTextSize(3);
+	p1 = 0;
+	p2 = 45;
+	p3 = 90;
     
 	while (1) {
         uint8_t temp;
@@ -212,7 +256,33 @@ int main(void)
         int16_t gyr_x;
         int16_t gyr_y;
         int16_t gyr_z;
+		char int_to_str[7];
+		char lcd_gyr[3];
 
+		sprintf(lcd_gyr, "%s", "X:");
+		sprintf(int_to_str, "%d", gyr_x);
+		strcat(lcd_gyr, int_to_str);
+
+		gfx_fillScreen(LCD_BLACK);
+		gfx_setCursor(15, 36);
+		gfx_puts(lcd_gyr);
+	
+		sprintf(lcd_gyr, "%s", "Y:");
+		sprintf(int_to_str, "%d", gyr_y);
+		strcat(lcd_gyr, int_to_str);
+
+		gfx_setCursor(15, 90);
+		gfx_puts(lcd_gyr);
+
+		sprintf(lcd_gyr, "%s", "Z:");
+		sprintf(int_to_str, "%d", gyr_z);
+		strcat(lcd_gyr, int_to_str);
+
+		gfx_setCursor(15, 144);
+		gfx_puts(lcd_gyr);
+	
+		lcd_show_frame();
+		
 		gpio_clear(GPIOC, GPIO1);             
 		spi_send(SPI5, GYR_WHO_AM_I | 0x80);
 		spi_read(SPI5); 
