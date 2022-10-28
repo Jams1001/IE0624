@@ -66,7 +66,27 @@ void spi_setup(void)
 	spi_set_nss_high(SPI5);
     SPI_I2SCFGR(SPI5) &= ~SPI_I2SCFGR_I2SMOD;
 	spi_enable(SPI5);
+
+
+	/* Enable GPIOG clock. */
+	rcc_periph_clock_enable(RCC_GPIOG);
+
+	/* Set GPIO13 (in GPIO port G) to 'output push-pull'. */
+	gpio_mode_setup(GPIOG, GPIO_MODE_OUTPUT,
+			GPIO_PUPD_NONE, GPIO13);
+
 }
+
+static void button_setup(void)
+{
+	/* Enable GPIOA clock. */
+	rcc_periph_clock_enable(RCC_GPIOA);
+
+	/* Set GPIO0 (in GPIO port A) to 'input open-drain'. */
+	gpio_mode_setup(GPIOA, GPIO_MODE_INPUT, GPIO_PUPD_NONE, GPIO0);
+}
+
+
 
 static void my_usart_print_int(uint32_t usart, int32_t value)
 {
@@ -131,7 +151,7 @@ print_decimal(int num)
 	int		len = 0;
 	char	is_signed = 0;
 	
-	if(0){
+	if (gpio_get(GPIOA, GPIO0)) {
 		if (num < 0) {
 			is_signed++;
 			num = 0 - num;

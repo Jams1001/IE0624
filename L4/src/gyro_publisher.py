@@ -1,22 +1,11 @@
 import paho.mqtt.client as mqtt
 import serial, time, json
 
-
 ser = serial.Serial(port = '/dev/ttyACM0', baudrate=115200, timeout=1) 
 print("Connected to MCU")
 data_rows = []
 header = ['x', 'y', 'z']
 print(header)
-
-while(1):
-    data = ser.readline().decode('utf-8').replace('\r', "").replace('\n', "")
-    data = data.split('\t')
-
-    if len(data) >= 3:
-        time.sleep(2)
-        print(data)
-#data = [1, 4, 3]
-
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
@@ -31,10 +20,6 @@ def on_disconnect(client, userdata, rc):
     else:
         print("System disconnected via code: ", rc)
 
-
-
-PuertoSerial = serial.Serial(port = '/tmp/ttyACM0') 
-print("Connected to serial port")
 client = mqtt.Client("B95222")
 client.connected = False
 client.on_connect = on_connect
@@ -49,10 +34,13 @@ client.connect(broker, port)
 dict = dict()
 
 while(1):
+    data = ser.readline().decode('utf-8').replace('\r', "").replace('\n', "")
+    data = data.split('\t')
+    if len(data) >= 3:
         dict["x"] = data[0]
         dict["y"] = data[1]
         dict["z"] = data[2]
-        time.sleep(2)
+        #time.sleep(2)
         output = json.dumps(dict)
         print(output)
         client.publish(topic, output)
