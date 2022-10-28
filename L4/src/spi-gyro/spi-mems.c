@@ -130,24 +130,29 @@ print_decimal(int num)
 	char	buf[10];
 	int		len = 0;
 	char	is_signed = 0;
-
-	if (num < 0) {
-		is_signed++;
-		num = 0 - num;
+	
+	if(0){
+		if (num < 0) {
+			is_signed++;
+			num = 0 - num;
+		}
+		buf[ndx++] = '\000';
+		do {
+			buf[ndx++] = (num % 10) + '0';
+			num = num / 10;
+		} while (num != 0);
+		ndx--;
+		if (is_signed != 0) {
+			console_putc('-');
+			len++;
+		}
+		while (buf[ndx] != '\000') {
+			console_putc(buf[ndx--]);
+			len++;
+		}
 	}
-	buf[ndx++] = '\000';
-	do {
-		buf[ndx++] = (num % 10) + '0';
-		num = num / 10;
-	} while (num != 0);
-	ndx--;
-	if (is_signed != 0) {
-		console_putc('-');
-		len++;
-	}
-	while (buf[ndx] != '\000') {
-		console_putc(buf[ndx--]);
-		len++;
+	else{
+		len = 0;
 	}
 	return len; /* number of characters printed */
 }
