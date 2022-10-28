@@ -40,7 +40,6 @@ while(1):
         dict["x"] = data[0]
         dict["y"] = data[1]
         dict["z"] = data[2]
-        #time.sleep(2)
         output = json.dumps(dict)
         print(output)
         client.publish(topic, output)
