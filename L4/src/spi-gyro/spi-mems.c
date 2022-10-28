@@ -170,7 +170,7 @@ print_decimal(int num)
 			console_putc(buf[ndx--]);
 			len++;
 		}
-		gpio_set(GPIOG, GPIO13);
+		gpio_toggle(GPIOG, GPIO13);
 	}
 	else{
 		len = 0;
