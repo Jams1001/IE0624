@@ -35,6 +35,7 @@
 
 /* Convert degrees to radians */
 #define d2r(d) ((d) * 6.2831853 / 360.0)
+uint8_t com_en;
 
 uint16_t read_reg(int reg);
 void write_reg(uint8_t reg, uint8_t value);
@@ -85,8 +86,6 @@ static void button_setup(void)
 	gpio_mode_setup(GPIOA, GPIO_MODE_INPUT, GPIO_PUPD_NONE, GPIO0);
 	gpio_mode_setup(GPIOG, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO13);
 }
-
-
 
 static void my_usart_print_int(uint32_t usart, int32_t value)
 {
@@ -151,7 +150,7 @@ print_decimal(int num)
 	int		len = 0;
 	char	is_signed = 0;
 	
-	if (gpio_get(GPIOA, GPIO0)) {
+	if (com_en) {
 		if (num < 0) {
 			is_signed++;
 			num = 0 - num;
@@ -221,6 +220,7 @@ int main(void)
 
 	clock_setup();
 	console_setup(115200);
+	com_en = 1;
 
 	spi_setup();
 
@@ -285,6 +285,15 @@ int main(void)
         int16_t gyr_z;
 		char int_to_str[7];
 		char lcd_gyr[3];
+
+		if (gpio_get(GPIOA, GPIO0)) {
+			if(com_en){
+				com_en = 0;
+			}
+			else{
+				com_en = 1;
+			}
+		}
 
 		sprintf(lcd_gyr, "%s", "X:");
 		sprintf(int_to_str, "%d", gyr_x);
@@ -384,6 +393,8 @@ int main(void)
 		int i;
 		for (i = 0; i < 80000; i++)    /* Wait a bit. */
 			__asm__("nop");
+
+		msleep(100);
 	}
 
 	return 0;
