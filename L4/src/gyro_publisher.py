@@ -28,7 +28,7 @@ client.on_disconnect = on_disconnect
 broker ="iot.eie.ucr.ac.cr"
 port = 1883
 topic = "v1/devices/me/telemetry"
-device = "n304FtKg956XPgJMSCl9"
+device = "znHTWqolDS2o8oq2OMEC"
 client.username_pw_set(device)
 client.connect(broker, port)
 dict = dict()
@@ -40,7 +40,13 @@ while(1):
         dict["x"] = data[0]
         dict["y"] = data[1]
         dict["z"] = data[2]
-        dict["Battery Low"] = data[3]
+
+        if(data[3] == "1"):
+            alarm = "YES"
+        else:
+            alarm = "NO"
+
+        dict["Battery Low"] = alarm
         output = json.dumps(dict)
         print(output)
         client.publish(topic, output)
