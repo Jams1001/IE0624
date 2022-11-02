@@ -38,6 +38,8 @@
 #define d2r(d) ((d) * 6.2831853 / 360.0)
 uint8_t com_en;
 uint16_t battery;
+uint8_t batt_alarm;
+
 uint16_t read_reg(int reg);
 void write_reg(uint8_t reg, uint8_t value);
 uint8_t read_xyz(int16_t vecs[3]);
@@ -53,7 +55,8 @@ void spi_setup(void)
 	gpio_mode_setup(GPIOC, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO1);
     gpio_set(GPIOC, GPIO1);
 
-    gpio_mode_setup(GPIOF, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO7 | GPIO8 | GPIO9);   
+    gpio_mode_setup(GPIOF, GPIO_MODE_AF, GPIO_PUPD_NONE,
+		GPIO7 | GPIO8 | GPIO9);   
 	gpio_set_af(GPIOF, GPIO_AF5, GPIO7 | GPIO8 | GPIO9);
 
     spi_set_master_mode(SPI5);
@@ -73,7 +76,7 @@ void spi_setup(void)
 	rcc_periph_clock_enable(RCC_GPIOG);
 
 	/* Set GPIO13 (in GPIO port G) to 'output push-pull'. */
-	gpio_mode_setup(GPIOG, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO13);
+	gpio_mode_setup(GPIOG, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO13 | GPIO14);
 
 }
 
@@ -84,7 +87,7 @@ static void button_setup(void)
 
 	/* Set GPIO0 (in GPIO port A) to 'input open-drain'. */
 	gpio_mode_setup(GPIOA, GPIO_MODE_INPUT, GPIO_PUPD_NONE, GPIO0);
-	gpio_mode_setup(GPIOG, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO13);
+	gpio_mode_setup(GPIOG, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO13 | GPIO14);
 }
 
 static void my_usart_print_int(uint32_t usart, int32_t value)
@@ -256,7 +259,9 @@ int main(void)
     gpio_clear(GPIOC, GPIO1);
 	spi_send(SPI5, GYR_CTRL_REG1); 
 	spi_read(SPI5);
-	spi_send(SPI5, GYR_CTRL_REG1_PD | GYR_CTRL_REG1_XEN | GYR_CTRL_REG1_YEN | GYR_CTRL_REG1_ZEN | (3 << GYR_CTRL_REG1_BW_SHIFT));
+	spi_send(SPI5, GYR_CTRL_REG1_PD | GYR_CTRL_REG1_XEN |
+			GYR_CTRL_REG1_YEN | GYR_CTRL_REG1_ZEN |
+			(3 << GYR_CTRL_REG1_BW_SHIFT));
 	spi_read(SPI5);
 	gpio_set(GPIOC, GPIO1); 
 
@@ -293,6 +298,12 @@ int main(void)
 	gfx_puts("IE-0624 Laboratorio de");
 	gfx_setCursor(15, 77);
 	gfx_puts("Microcontroladores");
+	gfx_setCursor(15, 100);
+	gfx_puts("Estudiantes:");
+	gfx_setCursor(15, 120);
+	gfx_puts("Jafet Gutierrez - B73558");
+	gfx_setCursor(15, 135);
+	gfx_puts("Jorge Mora - B95222");
 	lcd_show_frame();
 	console_puts("Now it has a bit of structured graphics.\n");
 	console_puts("Press a key for some simple animation.\n");
@@ -426,9 +437,19 @@ int main(void)
         gyr_y = gyr_y*L3GD20_SENSITIVITY_500DPS;
         gyr_z = gyr_z*L3GD20_SENSITIVITY_500DPS;
 
+		if(battery <= 7){
+			batt_alarm = 1;
+			gpio_set(GPIOG, GPIO14);
+		}
+		else{
+			batt_alarm = 0;
+			gpio_clear(GPIOG, GPIO14);
+		}
+
 	    print_decimal(gyr_x); console_puts("\t");
         print_decimal(gyr_y); console_puts("\t");
-        print_decimal(gyr_z); console_puts("\n");
+        print_decimal(gyr_z); console_puts("\t");
+		print_decimal(batt_alarm); console_puts("\n");
 
 		int i;
 		for (i = 0; i < 80000; i++)    /* Wait a bit. */
