@@ -26,6 +26,7 @@
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/spi.h>
+#include <libopencm3/stm32/adc.h>
 #include "clock.h"
 #include "console.h"
 #include "sdram.h"
@@ -36,6 +37,7 @@
 /* Convert degrees to radians */
 #define d2r(d) ((d) * 6.2831853 / 360.0)
 uint8_t com_en;
+uint16_t battery;
 
 uint16_t read_reg(int reg);
 void write_reg(uint8_t reg, uint8_t value);
@@ -178,6 +180,34 @@ print_decimal(int num)
 	return len; /* number of characters printed */
 }
 
+static void adc_setup(void)
+{
+	rcc_periph_clock_enable(RCC_ADC1);
+  	rcc_periph_clock_enable(RCC_GPIOA);
+	gpio_mode_setup(GPIOA, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO1);
+
+	adc_power_off(ADC1);
+  	adc_disable_scan_mode(ADC1);
+  	adc_set_sample_time_on_all_channels(ADC1, ADC_SMPR_SMP_3CYC);
+
+	adc_power_on(ADC1);
+}
+
+static uint16_t read_adc_naiive(uint8_t channel)
+{
+	uint8_t channel_array[16];
+	channel_array[0] = channel;
+	adc_set_regular_sequence(ADC1, 1, channel_array);
+	adc_start_conversion_regular(ADC1);
+	while (!adc_eoc(ADC1));
+	uint16_t reg16 = adc_read_regular(ADC1);
+	return reg16;
+}
+
+void adc_update(void){
+	battery = read_adc_naiive(1)*9/4095;
+}
+
 char *axes[] = { "X: ", "Y: ", "Z: " };
 
 #define GYR_RNW			(1 << 7) /* Write when zero  (ahorita en 1, read)*/  
@@ -223,6 +253,7 @@ int main(void)
 	com_en = 1;
 
 	spi_setup();
+	adc_setup();
 
     gpio_clear(GPIOC, GPIO1);
 	spi_send(SPI5, GYR_CTRL_REG1); 
@@ -284,7 +315,9 @@ int main(void)
         int16_t gyr_y;
         int16_t gyr_z;
 		char int_to_str[7];
-		char lcd_gyr[3];
+		char lcd_out[3];
+
+		adc_update();
 
 		if (gpio_get(GPIOA, GPIO0)) {
 			if(com_en){
@@ -295,27 +328,38 @@ int main(void)
 			}
 		}
 
-		sprintf(lcd_gyr, "%s", "X:");
+		sprintf(lcd_out, "%s", "X:");
 		sprintf(int_to_str, "%d", gyr_x);
-		strcat(lcd_gyr, int_to_str);
+		strcat(lcd_out, int_to_str);
 
 		gfx_fillScreen(LCD_BLACK);
 		gfx_setCursor(15, 36);
-		gfx_puts(lcd_gyr);
+		gfx_puts(lcd_out);
 	
-		sprintf(lcd_gyr, "%s", "Y:");
+		sprintf(lcd_out, "%s", "Y:");
 		sprintf(int_to_str, "%d", gyr_y);
-		strcat(lcd_gyr, int_to_str);
+		strcat(lcd_out, int_to_str);
 
 		gfx_setCursor(15, 90);
-		gfx_puts(lcd_gyr);
+		gfx_puts(lcd_out);
 
-		sprintf(lcd_gyr, "%s", "Z:");
+		sprintf(lcd_out, "%s", "Z:");
 		sprintf(int_to_str, "%d", gyr_z);
-		strcat(lcd_gyr, int_to_str);
+		strcat(lcd_out, int_to_str);
 
 		gfx_setCursor(15, 144);
-		gfx_puts(lcd_gyr);
+		gfx_puts(lcd_out);
+
+		sprintf(int_to_str, "%d", battery);
+
+		gfx_setCursor(15, 198);
+		gfx_puts("Batt: ");
+
+		gfx_setCursor(130, 232);
+		gfx_puts(int_to_str);
+
+		gfx_setCursor(160, 232);
+		gfx_puts("V");
 	
 		lcd_show_frame();
 		
