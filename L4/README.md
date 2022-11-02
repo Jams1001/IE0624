@@ -25,6 +25,7 @@ Una vez dentro del nuevo directorio:
 Ejecutar la sintaxis en este orden:
 
 make
+
 make flash
 
 Una vez «flasheado» el firmware, ya se puede ejecutar el gyro\_publisher.py  adjunto en el entregable.
