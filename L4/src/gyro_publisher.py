@@ -4,7 +4,7 @@ import serial, time, json
 ser = serial.Serial(port = '/dev/ttyACM0', baudrate=115200, timeout=1) 
 print("Connected to MCU")
 data_rows = []
-header = ['x', 'y', 'z']
+header = ['x', 'y', 'z', 'Battery Low']
 print(header)
 
 def on_connect(client, userdata, flags, rc):
@@ -40,6 +40,7 @@ while(1):
         dict["x"] = data[0]
         dict["y"] = data[1]
         dict["z"] = data[2]
+        dict["Battery Low"] = data[3]
         output = json.dumps(dict)
         print(output)
         client.publish(topic, output)

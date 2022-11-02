@@ -36,7 +36,6 @@
 /* Convert degrees to radians */
 #define d2r(d) ((d) * 6.2831853 / 360.0)
 uint8_t com_en;
-
 uint16_t read_reg(int reg);
 void write_reg(uint8_t reg, uint8_t value);
 uint8_t read_xyz(int16_t vecs[3]);
@@ -52,8 +51,7 @@ void spi_setup(void)
 	gpio_mode_setup(GPIOC, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO1);
     gpio_set(GPIOC, GPIO1);
 
-    gpio_mode_setup(GPIOF, GPIO_MODE_AF, GPIO_PUPD_NONE,
-		GPIO7 | GPIO8 | GPIO9);   
+    gpio_mode_setup(GPIOF, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO7 | GPIO8 | GPIO9);   
 	gpio_set_af(GPIOF, GPIO_AF5, GPIO7 | GPIO8 | GPIO9);
 
     spi_set_master_mode(SPI5);
@@ -227,9 +225,7 @@ int main(void)
     gpio_clear(GPIOC, GPIO1);
 	spi_send(SPI5, GYR_CTRL_REG1); 
 	spi_read(SPI5);
-	spi_send(SPI5, GYR_CTRL_REG1_PD | GYR_CTRL_REG1_XEN |
-			GYR_CTRL_REG1_YEN | GYR_CTRL_REG1_ZEN |
-			(3 << GYR_CTRL_REG1_BW_SHIFT));
+	spi_send(SPI5, GYR_CTRL_REG1_PD | GYR_CTRL_REG1_XEN | GYR_CTRL_REG1_YEN | GYR_CTRL_REG1_ZEN | (3 << GYR_CTRL_REG1_BW_SHIFT));
 	spi_read(SPI5);
 	gpio_set(GPIOC, GPIO1); 
 
