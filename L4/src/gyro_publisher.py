@@ -47,6 +47,7 @@ while(1):
             alarm = "NO"
 
         dict["Battery Low"] = alarm
+        dict["Battery Lvl"] = data[4]
         output = json.dumps(dict)
         print(output)
         client.publish(topic, output)

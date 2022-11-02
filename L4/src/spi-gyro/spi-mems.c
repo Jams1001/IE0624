@@ -449,7 +449,8 @@ int main(void)
 	    print_decimal(gyr_x); console_puts("\t");
         print_decimal(gyr_y); console_puts("\t");
         print_decimal(gyr_z); console_puts("\t");
-		print_decimal(batt_alarm); console_puts("\n");
+		print_decimal(batt_alarm); console_puts("\t");
+		print_decimal(battery); console_puts("\n");
 
 		int i;
 		for (i = 0; i < 80000; i++)    /* Wait a bit. */
