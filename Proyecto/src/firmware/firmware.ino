@@ -14,12 +14,10 @@ void loop()
   
   if (pos == "ON"){
     digitalWrite (LED_BUILTIN, HIGH);
-    delay(1000);
   }
 
   else if (pos == "OFF"){
     digitalWrite (LED_BUILTIN, LOW);
-    delay(1000);
   }
 
 }
