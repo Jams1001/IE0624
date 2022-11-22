@@ -1,4 +1,4 @@
-int data;
+String pos;
 
 void setup() 
 { 
@@ -10,11 +10,16 @@ void setup()
  
 void loop() 
 {
-    data = Serial.read();
-  if (data >= 50)
-  digitalWrite (LED_BUILTIN, HIGH);
+  pos = Serial.readString();
+  
+  if (pos == "ON"){
+    digitalWrite (LED_BUILTIN, HIGH);
+    delay(1000);
+  }
 
-  else if (data < 50)
-  digitalWrite (LED_BUILTIN, LOW);
+  else if (pos == "OFF"){
+    digitalWrite (LED_BUILTIN, LOW);
+    delay(1000);
+  }
 
 }

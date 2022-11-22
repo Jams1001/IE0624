@@ -7,10 +7,17 @@ import os
 import serial
 import csv
 
+ON = True
+OFF = False
+
 arduino_port = "/dev/ttyACM0"  
 baud = 9600
 ser = serial.Serial(arduino_port, baud)
 print("Connected to Arduino port:" + arduino_port)
+
+prev_state = False
+ac_state = False
+enable = False
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_style = mp.solutions.drawing_styles
@@ -29,17 +36,34 @@ baud = 9600
 ser = serial.Serial(arduino_port, baud)
 print("Connected to Arduino port:" + arduino_port)'''
 
-def arduino(num):
+def arduino(ac_pos):
     #num = input("Enter a number: ")
     #print("\n")
     
-    if (num >= 50):    
-        ser.write(bytes(num)) 
-        print ("LED turned ON")
-    
-    if (num < 50): 
-        ser.write(bytes(num))
-        print ("LED turned OFF")
+    global prev_state
+    global ac_state
+    global enable
+
+    print(str(ac_pos)[0:4])
+
+    if(ac_pos >= 50):
+        ac_state = ON
+    elif(ac_pos < 50):
+        ac_state = OFF
+
+    if(ac_state != prev_state):
+        enable = True
+        prev_state = ac_state
+    else:
+        enable = False
+
+    if(enable):
+        if (ac_pos >= 50):    
+            print("LED turned ON")
+            ser.write(bytes("ON", 'utf-8'))
+        if (ac_pos < 50): 
+            print ("LED turned OFF")
+            ser.write(bytes("OFF", 'utf-8'))
 
 cap = cv2.VideoCapture(0)
 with mp_hands.Hands(
@@ -49,6 +73,7 @@ with mp_hands.Hands(
 
     counter = 0
     while cap.isOpened():
+        enable = False
         success, image = cap.read()
         if not success:
             print("Ignoring...")
@@ -75,12 +100,10 @@ with mp_hands.Hands(
 
                 pos_i = int(pos)
 
-                print(str(pos_i)[0:4])
-
                 # ser.write(bytes(pos, 'utf-8')) 
                 # print ("LED turned ON")
 
-                arduino(pos_i)
+                arduino(int(str(pos_i)[0:4]))
 
         cv2.imshow('MediaPipe Hands', cv2.flip(image, 1))
         if cv2.waitKey(1) & 0xFF == ord('q'):
