@@ -4,7 +4,7 @@ import time
 import csv
 
 record = []
-header = ['x', 'y', 'z']
+header = ['aX', 'aY', 'aZ', 'gX', 'gY', 'gZ']
 samples = 3000
 counter = 0
 filename = sys.argv[1]
@@ -22,7 +22,7 @@ while(counter < samples):
     data = ser.readline().decode('utf-8').replace('\r', "").replace('\n', "")
     data = data.split('\t')
 
-    if(len(data) == 3):    
+    if(len(data) == 6):    
         writer.writerow(data)
         print(data)
         
