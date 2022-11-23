@@ -15,8 +15,8 @@ baud = 9600
 ser = serial.Serial(arduino_port, baud)
 print("Connected to Arduino port:" + arduino_port)
 
-prev_state = False
-ac_state = False
+prev_state = 0
+ac_state = 0
 enable = False
 
 mp_drawing = mp.solutions.drawing_utils
@@ -46,10 +46,35 @@ def arduino(ac_pos):
 
     print(str(ac_pos)[0:4])
 
-    if(ac_pos >= 50):
-        ac_state = ON
-    elif(ac_pos < 50):
-        ac_state = OFF
+    if(ac_pos < 10):
+        ac_state = 0
+
+    elif(ac_pos >= 10 and ac_pos < 20):
+        ac_state = 10
+
+    elif(ac_pos >= 20 and ac_pos < 30):
+        ac_state = 20
+
+    elif(ac_pos >= 30 and ac_pos < 40):
+        ac_state = 30
+
+    elif(ac_pos >= 40 and ac_pos < 50):
+        ac_state = 40
+
+    elif(ac_pos >= 50 and ac_pos < 60):
+        ac_state = 50
+
+    elif(ac_pos >= 60 and ac_pos < 70):
+        ac_state = 60
+
+    elif(ac_pos >= 70 and ac_pos < 80):
+        ac_state = 70
+
+    elif(ac_pos >= 80 and ac_pos < 90):
+        ac_state = 80
+
+    elif(ac_pos >= 90 and ac_pos < 100):
+        ac_state = 90
 
     if(ac_state != prev_state):
         enable = True
@@ -58,12 +83,14 @@ def arduino(ac_pos):
         enable = False
 
     if(enable):
-        if (ac_pos >= 50):    
-            print("LED turned ON")
-            ser.write(bytes("ON", 'utf-8'))
-        if (ac_pos < 50): 
-            print ("LED turned OFF")
-            ser.write(bytes("OFF", 'utf-8'))
+        ser.write(bytes(str(ac_state), 'utf-8'))
+    
+    '''if (ac_pos >= 50):    
+        print("LED turned ON")
+        ser.write(bytes("ON", 'utf-8'))
+    if (ac_pos < 50): 
+        print ("LED turned OFF")
+        ser.write(bytes("OFF", 'utf-8'))'''
 
 cap = cv2.VideoCapture(0)
 with mp_hands.Hands(
