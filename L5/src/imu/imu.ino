@@ -25,7 +25,7 @@
 #include "model.h"
 
 const float accelerationThreshold = 2.5; // threshold of significant in G's
-const int numSamples = 119;
+const int numSamples = 1174;
 
 int samplesRead = numSamples;
 
@@ -146,9 +146,7 @@ void loop() {
 
         // Loop through the output tensor values from the model
         for (int i = 0; i < NUM_GESTURES; i++) {
-          Serial.print(GESTURES[i]);
-          Serial.print(": ");
-          Serial.println(tflOutputTensor->data.f[i], 6);
+          Serial.println(GESTURES[i]);
         }
         Serial.println();
       }
