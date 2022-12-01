@@ -1,1 +1,59 @@
 \subsection{Análisis de SW}
+\subsubsection{recoder.py}
+Este archivo entregado en la ruta \texttt{/IE0624/L5/src
+}, únicamente se encarga de recibir la información serial enviada por el microcontrolador. Recibe 6 variables: \texttt{header = ['aX', 'aY', 'aZ', 'gX', 'gY', 'gZ']} correspondencientes a las 3 componentes de la aceleración y el giroscopio del LSM9DS1.\\
+Con esta información escribe los archivos con los datos para el movimiento específico que se está haciendo en ese momento en formato de \texttt{csv}. 
+\subsubsection{Modelo}
+A continuación se explica las secciones con las que cuenta el archivo que genera el modelo. Para esto referencie el archivo entregado como \texttt{arduino\_tinyml\_workshop.ipynb}, el cual corrresponde a un notebook de google colab.\\
+Esta sección no es de principal interés para los fines evaluativos del laboratorio. Consiste primeramente en graficar los datos del csv procesado por el \texttt{recoder.py}. Este primer punto 
+únicamente es con fines ilustrativos.\\ Seguidamente se debe entrenar la red neuronal del modelo con las muestras por cada uno de los 3 gestos deseados a predecir. De modo que se normalizan los datos de de 0 a 1 y se definen las entradas del modelo.\\
+Luego se debe dividir las muestras para generar, validar y entrenar el modelo. Esta es la sección de Aleatorizar y dividir los pares de entrada y salida para el entrenamiento. dividiendo aleatoriamente los pares de entrada y salida en conjuntos de datos: 60\% para entrenamiento, 20\%  para validación (para medir qué tan bien se está desempeñando el modelo durante el entrenamiento) y 20\% para prueba (para probar el modelo después del entrenamiento).\\
+El siguiente punto importante es construir y entrenar la red neuronal, lo cual se hace mediante un modelo de TensorFlow con la API de alto nivel de Keras.\\
+La siguiente sección de interés es la validación del desempeño del modelo mediante la gráfica de  la pérdida ( definida mediante el "error cuadrático medio" como la función de pérdida) para ver cuándo el modelo deja de mejorar. Esto se realiza de diferentes formas y entre esas el cálculo del error absoluto medio es otra métrica para juzgar el rendimiento del modelo.\\
+ Seguidamente viene la validación en donde se ponen los datos de prueba en el modelo y trazar las predicciones.\\
+ Una vez validado, se convierte el modelo al formato TensorFlow Lite sin cuantificación lo cual finaliza el protagonista del generador del modelo.\\
+ Para poder convertir el modelo anterior en una librería de arduino se debe ejecutar la siguiente sintaxis:
+ \begin{minted}{C}
+!echo "const unsigned char model[] = {" > /content/model.h
+!cat gesture_model.tflite | xxd -i      >> /content/model.h
+!echo "};"                              >> /content/model.h
+
+ \end{minted}
+
+
+A pesar de que esto no es de caracter principal en la evaluación, el generador del modelo cumple su función pues proporciona un modelo funcional para cargar en el microcontrolador.
+
+
+
+
+
+
+\subsubsection{Firmwares}
+
+\textbf{data\_senser.ino}
+
+El primer sketch, llamado \texttt{data\_senser.ino}, fue un firmware que se desarrolló inicialmente para acceder a las lecturas del giroscopio y de aceleración que registra el Arduino Nano 33 BLE. Además de acceder a dichos registros, este firmware se encarga de enviar los datos leídos en cada ciclo al puerto serial, para que estos puedan ser recopilados desplegados y guardados por el script \texttt{recorder.py}.
+
+\textbf{imu.ino}
+
+El segundo sketch, llamado \texttt{imu.ino}, es el firmware en el cual se implementa el modelo generado para la detección de movimientos. En este sketch primero se incluye la librería \texttt{Arduino\_LSM9DS1}, la cual permite leer los valores del acelerómetro, magnetómetro y giroscopio de la IMU LSM9DS1 en el Arduino Nano 33 BLE Sense. Después se incluyen los encabezados asociados a todas las funciones de TensorFlow Lite que se van a usar más adelante. El último archivo que se incluye es \texttt{model.h}, el cual contiene el modelo entrenado de la red neuronal que se generó anteriormente. Posteriormente, se crea un array para asignar el índice de gestos a un nombre, como se muestra a continuación:
+
+\begin{minted}{C}
+const char* GESTURES[] = {
+  "circle",
+  "up-down",
+  "stationary",
+};
+\end{minted}
+
+Si el Arduino detecta un movimiento válido accederá a uno de los elementos dentro del array \texttt{GESTURES} para escribirlo al puerto serial.\\
+Dentro de la configuración inicial se inicializa el puerto serial, así como también el IMU. También se obtiene la representación TFL de la matriz de bytes del modelo, se crea un interprete para correr el modelo, se asigna memoria para sus tensors de entrada y salida y se obtienen punteros para estos últimos dos.\\
+Por otro lado, en el lazo de ejecución se tienen variables de tipo flotante para almacenar los datos leídos de aceleración y el giroscopio. Después se espera a que la cantidad de muestras recolectadas sea la suficiente como para determinar que se produjo un movimiento significativo. Luego, se normalizan los datos recopilados de la IMU entre 0 y 1, y los resultados son almacenados en el tensor de entrada del modelo. Por último, se ejecuta la inferencia y se escribe en el puerto serial el movimiento detectado por el modelo, como se muestra a continuación:
+
+\begin{minted}{C}
+for (int i = 0; i < NUM_GESTURES; i++) {
+    Serial.print(GESTURES[i]);
+    Serial.print(": ");
+}
+\end{minted}
+
