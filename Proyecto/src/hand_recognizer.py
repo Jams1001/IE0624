@@ -1,11 +1,12 @@
 from pyautogui import *
 import mediapipe as mp
 import pyautogui
-import time
 import cv2
 import os
 import serial
-import csv
+import calendar
+import datetime
+
 
 ON = True
 OFF = False
@@ -22,14 +23,6 @@ enable = False
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_style = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
-
-'''
-PARA MENSAJE DE "INFO: Created TensorFlow Lite XNNPACK delegate for CPU":
-1. Quitar cv2.CAP_DSHOW de la siguiente linea
-2. Correr el script
-3. Devolver cv2.CAP_DSHOW
-4. Volver a correr el script
-'''
 
 def arduino(ac_pos):
     global prev_state
@@ -76,6 +69,12 @@ def arduino(ac_pos):
 
     if(enable):
         ser.write(bytes(str(ac_state), 'utf-8'))
+
+date = datetime.datetime.utcnow()
+utc_time = calendar.timegm(date.utctimetuple())
+print(utc_time)
+ser.write(bytes(str(utc_time), 'utf-8'))
+
 cap = cv2.VideoCapture(0)
 with mp_hands.Hands(
     model_complexity=0,
@@ -103,8 +102,8 @@ with mp_hands.Hands(
                     hand_landmarks,
                     mp_hands.HAND_CONNECTIONS,
                     mp_drawing_style.get_default_hand_landmarks_style(),
-                    mp_drawing_style.get_default_hand_connections_style())      
-                
+                    mp_drawing_style.get_default_hand_connections_style())    
+
                 x = str(hand_landmarks.landmark[0]).split(' ')[1]
                 newX = x.split('y')[0] * 100
                 pos = float(newX[0:4])*100
