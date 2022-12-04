@@ -2,9 +2,8 @@
 
 void setup()  {
   Serial.begin(9600);
-  CntTime = Serial.readString();
   //setTime(1670178144);
-  setTime(CntTime);
+  setTime(Serial.readString());
 }
 
 void loop(){    

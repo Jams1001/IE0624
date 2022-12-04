@@ -11,10 +11,10 @@ import datetime
 ON = True
 OFF = False
 
-arduino_port = "/dev/ttyACM0"  
-baud = 9600
-ser = serial.Serial(arduino_port, baud)
-print("Connected to Arduino port:" + arduino_port)
+#arduino_port = "/dev/ttyACM0"  
+#baud = 9600
+#ser = serial.Serial(arduino_port, baud)
+#print("Connected to Arduino port:" + arduino_port)
 
 prev_state = 0
 ac_state = 0
@@ -73,7 +73,8 @@ def arduino(ac_pos):
 date = datetime.datetime.utcnow()
 utc_time = calendar.timegm(date.utctimetuple())
 print(utc_time)
-ser.write(bytes(str(utc_time), 'utf-8'))
+print(type(utc_time))
+#ser.write(bytes(str(utc_time), 'utf-8'))
 
 cap = cv2.VideoCapture(0)
 with mp_hands.Hands(
@@ -108,7 +109,7 @@ with mp_hands.Hands(
                 newX = x.split('y')[0] * 100
                 pos = float(newX[0:4])*100
                 pos_i = int(pos)
-                arduino(int(str(pos_i)[0:4]))
+                #arduino(int(str(pos_i)[0:4]))
 
         cv2.imshow('MediaPipe Hands', cv2.flip(image, 1))
         if cv2.waitKey(1) & 0xFF == ord('q'):
