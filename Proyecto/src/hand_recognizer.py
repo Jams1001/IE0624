@@ -1,20 +1,24 @@
 from pyautogui import *
 import mediapipe as mp
 import pyautogui
+import time
 import cv2
+import sys
 import os
 import serial
-import calendar
-import datetime
-
+import csv
 
 ON = True
 OFF = False
 
-#arduino_port = "/dev/ttyACM0"  
-#baud = 9600
-#ser = serial.Serial(arduino_port, baud)
-#print("Connected to Arduino port:" + arduino_port)
+arduino_port = "/dev/ttyACM0"  
+baud = 9600
+ser = serial.Serial(arduino_port, baud)
+print("Connected to Arduino port:" + arduino_port)
+
+hour = sys.argv[1]
+minute = sys.argv[2]
+second = sys.argv[3]
 
 prev_state = 0
 ac_state = 0
@@ -25,6 +29,7 @@ mp_drawing_style = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
 
 def arduino(ac_pos):
+    
     global prev_state
     global ac_state
     global enable
@@ -69,12 +74,19 @@ def arduino(ac_pos):
 
     if(enable):
         ser.write(bytes(str(ac_state), 'utf-8'))
+    
+def set_time(hour, minute, second):
+    
+    seconds_t = (int(hour)*3600) + (int(minute)*60) + int(second)
 
-date = datetime.datetime.utcnow()
-utc_time = calendar.timegm(date.utctimetuple())
-print(utc_time)
-print(type(utc_time))
-#ser.write(bytes(str(utc_time), 'utf-8'))
+    sleep(2)
+    print(seconds_t)
+    ser.write(bytes(str(seconds_t), 'utf-8'))
+    sleep(2)
+
+    print(str(hour)+":"+str(minute)+":"+str(second))
+
+set_time(hour, minute, second)
 
 cap = cv2.VideoCapture(0)
 with mp_hands.Hands(
@@ -103,13 +115,15 @@ with mp_hands.Hands(
                     hand_landmarks,
                     mp_hands.HAND_CONNECTIONS,
                     mp_drawing_style.get_default_hand_landmarks_style(),
-                    mp_drawing_style.get_default_hand_connections_style())    
-
+                    mp_drawing_style.get_default_hand_connections_style())      
                 x = str(hand_landmarks.landmark[0]).split(' ')[1]
                 newX = x.split('y')[0] * 100
+
                 pos = float(newX[0:4])*100
+
                 pos_i = int(pos)
-                #arduino(int(str(pos_i)[0:4]))
+
+                arduino(int(str(pos_i)[0:4]))
 
         cv2.imshow('MediaPipe Hands', cv2.flip(image, 1))
         if cv2.waitKey(1) & 0xFF == ord('q'):
