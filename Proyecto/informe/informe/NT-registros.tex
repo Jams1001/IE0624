@@ -1,1 +1,20 @@
 \subsection{Funciones de interés}
+\begin{itemize}
+    \item \textbf{pinMode():} Configura el pin especificado para que se comporte como una entrada o una salida \cite{arduino}.
+    \item \textbf{analogRead():} Lee el valor del pin analógico especificado. Las placas Arduino contienen un convertidor analógico a digital multicanal de 10 bits. Esto significa que mapeará los voltajes de entrada entre 0 y el voltaje de funcionamiento (5 V o 3,3 V) en valores enteros entre 0 y 1023. En un Arduino UNO, por ejemplo, esto produce una resolución entre lecturas de: 5 voltios / 1024 unidades o 0,0049 voltios (4,9 mV) por unidad \cite{arduino}.
+    \item \textbf{map():} Vuelve a asignar un número de un rango a otro. Es decir, un valor de fromLow se asignaría a toLow, un valor de fromHigh a toHigh, valores intermedios a valores intermedios, etc. Reasigna la escala anlógica a la escala digital en la resolución disponible \cite{arduino}.
+    \item \textbf{delay():}  Pausa el programa por la cantidad de tiempo (en milisegundos) especificado como parámetro. (Hay 1000 milisegundos en un segundo) \cite{arduino}.
+    \item \textbf{analogWrite():} Escribe un valor analógico (onda PWM) en un pin. Se puede usar para encender un LED con diferentes brillos o impulsar un motor a varias velocidades. Después de una llamada a analogWrite(), el pin generará una onda rectangular constante del ciclo de trabajo especificado hasta la próxima llamada a analogWrite() (o una llamada a digitalRead() o digitalWrite()) en el mismo pin. Recibe como parámetros \texttt{analogWrite(pin, value)}, en donde \texttt{pin} corresponde el pin de Arduino para escribir y value al ciclo de trabajo que va entre 0 (siempre apagado) y 255 (siempre encendido) \cite{arduino}.
+\end{itemize}
+
+\subsection{Librerías de interés}
+
+\begin{itemize}
+    \item \textbf{mediapipe:} Esta librería, para el script de reconocimiento, consiste  en una solución de detección de objetos 3D en tiempo real, de tal modo que detecta objetos en imágenes 2D y estima sus poses a través de un modelo, ya integrado, de machine learning.
+    \item \textbf{LiquidCrystal:} Esta librería, para el sketch de arduino, permite controlar pantallas LCD que son compatibles con el controlador Hitachi HD44780. Hay muchos de ellos por ahí, y generalmente puede identificarlos por la interfaz de 16 pines.
+    \item \textbf{TimerOne:} Esta librería, para el sketch de arduino, significa una solución  para tener un contador de 16 bits que se puede configurar para realizar varias funciones diferentes, tales como fuentes de reloj. Esta librería puede usar un prescalar o incremento basado en la entrada de un pin de flanco ascendente/descendente. este prescalar divide el reloj de la CPU por: OFF, 1, 8, 64, 256, 1024.
+    \item \textbf{RBDdimer:} Esta librería, para el sketch de arduino, se usa para trabajar con un dimmer. Brinda la capacidad de controlar una gran cantidad de dimmers; facilita la comunicación y el uso de variables en torno al dimmer. Funciona para los mcus de Mega, UNO, ESP8266, ESP32, Arduino M0, Arduino Zero, Arduino Due, STM32, entre otros.
+\end{itemize}
+
+
+%Protea UCR tutorial de iot por helber
