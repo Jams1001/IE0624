@@ -5,7 +5,7 @@
 
 #define outputPin  12 // PSM
 #define zerocross  2
-// #define relayPin 4
+#define relayPin 3
 
 String pos = "0";
 String prev_pos = "0";
@@ -24,7 +24,7 @@ void setup(){
   Serial.begin(9600);
   Wire.begin();
 
-  // pinMode(relayPin, OUTPUT);
+  pinMode(relayPin, OUTPUT);
 
   lcd.begin(16,2);
   lcd.clear();
@@ -89,42 +89,51 @@ void loop(){
   }
 
   if (pos == "0"){
-    dimmer.setPower(20);
+    digitalWrite(relayPin, HIGH);
   }
 
   else if (pos == "10"){
-    dimmer.setPower(25);
+    digitalWrite(relayPin, LOW);
+    dimmer.setPower(20);
   }
 
   else if (pos == "20"){
+    digitalWrite(relayPin, LOW);
     dimmer.setPower(27);
   }
 
   else if (pos == "30"){
+    digitalWrite(relayPin, LOW);
     dimmer.setPower(35);
   }
 
   else if (pos == "40"){
+    digitalWrite(relayPin, LOW);
     dimmer.setPower(37);
   }
 
   else if (pos == "50"){
+    digitalWrite(relayPin, LOW);
     dimmer.setPower(40);
   }
 
   else if (pos == "60"){
+    digitalWrite(relayPin, LOW);
     dimmer.setPower(43);
   }
 
   else if (pos == "70"){
+    digitalWrite(relayPin, LOW);
     dimmer.setPower(50);
   }
 
   else if (pos == "80"){
+    digitalWrite(relayPin, LOW);
     dimmer.setPower(56);
   }
   
   else if (pos == "90"){
+    digitalWrite(relayPin, LOW);
     dimmer.setPower(67);
   }
   
