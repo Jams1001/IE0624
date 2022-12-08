@@ -2,31 +2,50 @@
 
 \subsubsection{Firmware}
 
-De forma general, el firmware desarrollado genera el comportamiento deseado cuando se carga en el Arduino UNO. Esto se puede afirmar con base en que la intensidad luminosa de la bombilla cambia correctamente en función de la posición de una mano ante la 
+De forma general, se puede afirmar que el firmware desarrollado genera el comportamiento deseado cuando se carga en el Arduino UNO. La intensidad luminosa de la bombilla cambia correctamente en función de la posición de una mano ante la cámara de la computadora. Además, el lazo de ejecución modifica la intensidad luminosa a un valor predeterminado cuando el reloj configurado llega a cuatro horas específicas:
 
-
-Este consta de varias secciones de interés: \\
-Aunque la hora que debe tomar el proyecto de referencia, para que tenga sentido, deba ser la hora presente, para efectos demostrativos se seteó una hora desde el script de reconocimiento. Esto para poder comprobar de manera dinámica el funcionamiento a diferentes horas sin tener que esperar largas jornadas de tiempo para que con la librería \texttt{TimeOne.h} el microcontrolador lleve el conteo del tiempo. Dicho esto, el firmware primeramente debe inicializar una primera hora con la primera lectura del puerto serial. El primer dato de funcionamiento enviado por el puerto serial de la computadora al microcontrolador, prMecisamente es una hora que se define desde el script de reconocimiento explicado posteriormente. Desde este punto el microcontrolador lleva la cuenta ininterrumpidamente a menos de que se utilice el botón  reset integrado en la tableta de desarrollo, caso en donde se reiniciaría la hora. El funcionamiento de esta sección se comprobó con la ventana serial que integra el IDE utilizado y este mismo conteo se imprimió en una pantalla LCD externa; el conteo del tiempo es robusto y no presentó mayores dificultades.\\
-Para este punto el lazo de ejecución cambia la intensidad luminosa a un valor predeterminado cuando el reloj configurado llega a cuatro horas específicas:
 \begin{itemize}
-    \item $7:00$ define un $40\%$ de intensidad lumínica.
-    \item $8:30$ define un $80\%$ de intensidad lumínica.
-    \item $20:45$ define un $45\%$ de intensidad lumínica.
-    \item $22:15$ define un $20\%$ de intensidad lumínica.
+    \item $\boldsymbol{7:00}$ define un $40\%$ de intensidad lumínica.
+    \item $\boldsymbol{8:30}$ define un $80\%$ de intensidad lumínica.
+    \item $\boldsymbol{20:45}$ define un $45\%$ de intensidad lumínica.
+    \item $\boldsymbol{22:15}$ define un $20\%$ de intensidad lumínica.
 \end{itemize}
-Y tanto la hora como el porcentaje de luminosidad se despliegan en la pantalla LCD.\\
 
-Después de definir la intensidad en base a las horas, en la función loop se implementa una máquina de estados que asigna
+Por otro lado, tanto la hora como el porcentaje de luminosidad se despliegan en la pantalla LCD.
 
+Sin embargo, durante el desarrollo del proyecto se encontraron otros resultados y efectos de interés. En primer lugar, aunque la hora de referencia que toma el proyecto, para que tenga sentido, debería ser la hora presente, para efectos demostrativos se configura una hora desde el script de reconocimiento. Esto para poder comprobar de manera dinámica el funcionamiento a del Arduino UNO a diferentes horas sin tener que esperar largas jornadas de tiempo para que el microcontrolador llegue a las horas de interés. Dicho esto, se escribió el firmware para que inicialice el reloj a partir del dato recibido con la primera lectura que realiza del puerto serial. Este primer dato corresponde a la hora que se definió desde el script de reconocimiento explicado posteriormente. Desde este punto el microcontrolador lleva la cuenta del reloj ininterrumpidamente, a menos de que se utilice el botón reset integrado en la tableta de desarrollo. En este último caso, el Arduino entra en un estado de inactividad, en espera de recibir nuevamente una hora desde el puerto serial. El funcionamiento de esta sección se comprobó a través de la pantalla LCD externa, en la cual se despliega el reloj. Sin embargo, en esta parte se detectó que en ocasiones aparentemente aleatorias, la cuenta desplegada en la pantalla permanece en una cuenta más tiempo del esperado, para después saltar a la cuenta correcta. Se determinó que dicho bug puede deberse a que el Arduino UNO ejecuta los ciclos de control a una frecuencia más alta de lo que la pantalla LCD puede procesar adecuadamente. Para solucionar este error se recomienda utilizar un módulo adaptador de LCD a I2C para poder controlar la pantalla LCD con solo dos pines del Arduino UNO. De esta manera se podría tener un mejor control de los paquetes de datos que se envían del Arduino a la pantalla.
 
+Por otro lado, uno de los retos que se tuvo, a la hora debuggear el firmware, fue determinar el rango de valores a la entrada del módulo Dimmer AC que proporcionan su funcionamiento adecuado para una bombilla. Para integrar el módulo Dimmer AC al proyecto, se empleó la librería \texttt{RBDdimmer.h}, la cual provee una función llamada \texttt{setPower()} para configurar la intensidad luminosa que se quiere para la bombilla en un momento dado. Dicha función recibe números enteros en un rango entre 0 y 100. Dicho rango se estableció de esa manera para tener una referencia a nivel de porcentaje de la intensidad luminosa deseada. Sin embargo, los rangos de operación óptimos varían dependiendo de las características de la bombilla. Por esta razón, se tuvo que determinar dicho rango de manera experimental. Los valores de entrada de la función \texttt{setPower()} y los porcentajes de intensidad luminosa estimados que generan se presentan en la siguiente tabla:
 
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Entrada de \texttt{setPower()}} & \textbf{Porcentaje de intensidad luminosa estimado} \\ \hline
+20                                                       & $10\%$                                               \\ \hline
+27                                                       & $20\%$                                              \\ \hline
+35                                                       & $30\%$                                              \\ \hline
+37                                                       & $40\%$                                              \\ \hline
+40                                                       & $50\%$                                              \\ \hline
+43                                                       & $60\%$                                              \\ \hline
+50                                                       & $70\%$                                              \\ \hline
+56                                                       & $80\%$                                              \\ \hline
+67                                                       & $90\%$                                              \\ \hline
+\end{tabular}
+\caption{Entradas de \texttt{setPower()} y sus porcentajes de intensidad luminosa estimados}
+\label{porc}
+\end{table}
+
+\vspace*{-0.3cm}
+
+Como se muestra en la tabla \ref{porc}, el rango de entradas adecuado para la bombilla utilizada es $[20,67]$. Además, cabe mencionar que para proteger la resistencia de la bombilla incandescente se decidió no exceder el $90\%$ de intensidad luminosa.
 
 \subsubsection{Script de reconocimiento de imágenes de Python}
 Este script entregado en \texttt{/IE0624/Proyecto/src/hand\_recognizer.py} es el encargado de registrar en coordenadas  de la mano de derecha a izquierda con una resolución de 0 a 100 puntos de logintud. Adicionalmente también se encarga de solicitar 3 parámetros para definir una hora de inicio. Idealmente, registrar la hora de inicio sería para que el control de luz en base a la hora del día, tendría sentido con la hora real; pero para efectos demostrativos se solicitan los parámetros de hora para poder probar diferentes horas a voluntad y comprobar la funcionalidad del proyecto.\\
 En figura \ref{mano} se ilustra el funcionamiento del script.
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.5]{./images/mano.png} 
+\includegraphics[scale=0.40]{./images/mano.png} 
 \caption{Funcionalidad del script \texttt{hand\_recognizer.py} (Autoría propia).}
 \label{mano}
 \end{figure}
