@@ -1,20 +1,14 @@
-from pyautogui import *
 import mediapipe as mp
-import pyautogui
-import time
 import cv2
 import sys
-import os
-import serial
-import csv
 
 ON = True
 OFF = False
 
-arduino_port = "/dev/ttyACM0"  
-baud = 9600
-ser = serial.Serial(arduino_port, baud)
-print("Connected to Arduino port:" + arduino_port)
+#arduino_port = "/dev/ttyACM0"  
+#baud = 9600
+#ser = serial.Serial(arduino_port, baud)
+#print("Connected to Arduino port:" + arduino_port)
 
 hour = sys.argv[1]
 minute = sys.argv[2]
@@ -81,12 +75,12 @@ def set_time(hour, minute, second):
 
     sleep(2)
     print(seconds_t)
-    ser.write(bytes(str(seconds_t), 'utf-8'))
+    #ser.write(bytes(str(seconds_t), 'utf-8'))
     sleep(2)
 
     print(str(hour)+":"+str(minute)+":"+str(second))
 
-set_time(hour, minute, second)
+#set_time(hour, minute, second)
 
 cap = cv2.VideoCapture(0)
 with mp_hands.Hands(
@@ -122,8 +116,8 @@ with mp_hands.Hands(
                 pos = float(newX[0:4])*100
 
                 pos_i = int(pos)
-
-                arduino(int(str(pos_i)[0:4]))
+                print(pos_i)
+                #arduino(int(str(pos_i)[0:4]))
 
         cv2.imshow('MediaPipe Hands', cv2.flip(image, 1))
         if cv2.waitKey(1) & 0xFF == ord('q'):

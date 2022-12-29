@@ -1,8 +1,0 @@
-\subsection{Funciones de interés soportadas}
-\begin{itemize}
-    \item \textbf{pinMode():} Configura el pin especificado para que se comporte como una entrada o una salida \cite{arduino}.
-    \item \textbf{analogRead():} Lee el valor del pin analógico especificado. Las placas Arduino contienen un convertidor analógico a digital multicanal de 10 bits. Esto significa que mapeará los voltajes de entrada entre 0 y el voltaje de funcionamiento (5 V o 3,3 V) en valores enteros entre 0 y 1023. En un Arduino UNO, por ejemplo, esto produce una resolución entre lecturas de: 5 voltios / 1024 unidades o 0,0049 voltios (4,9 mV) por unidad \cite{arduino}.
-    \item \textbf{map():} Vuelve a asignar un número de un rango a otro. Es decir, un valor de fromLow se asignaría a toLow, un valor de fromHigh a toHigh, valores intermedios a valores intermedios, etc. Reasigna la escala anlógica a la escala digital en la resolución disponible \cite{arduino}.
-    \item \textbf{delay():}  Pausa el programa por la cantidad de tiempo (en milisegundos) especificado como parámetro. (Hay 1000 milisegundos en un segundo) \cite{arduino}.
-    \item \textbf{analogWrite():} Escribe un valor analógico (onda PWM) en un pin. Se puede usar para encender un LED con diferentes brillos o impulsar un motor a varias velocidades. Después de una llamada a analogWrite(), el pin generará una onda rectangular constante del ciclo de trabajo especificado hasta la próxima llamada a analogWrite() (o una llamada a digitalRead() o digitalWrite()) en el mismo pin. Recibe como parámetros \texttt{analogWrite(pin, value)}, en donde \texttt{pin} corresponde el pin de Arduino para escribir y value al ciclo de trabajo que va entre 0 (siempre apagado) y 255 (siempre encendido) \cite{arduino}.
-\end{itemize}
